@@ -15,6 +15,5 @@
  */
 
 include 'subb'
-include 'language'
 include ":org.xtext.example.mylanguage"
 project(":org.xtext.example.mylanguage).projectdir = file(/home/ben/workspace/org.xtext.example.mylanguage)
