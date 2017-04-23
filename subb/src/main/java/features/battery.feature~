@@ -1,0 +1,16 @@
+Test: Title 
+Description: "I want to use this template for my feature file"
+Given: Robot position is 0.0 0.0 0.0 within sphere with radius 10.0 meter
+When: Battery level is equal to 100.0 percent
+When: Robot distance to 0 0 0 is lower then 80.0 meter
+When: Robot position is 0.0 0.0 0.0 within sphere with radius 10.0 meter
+Then: Robot state is LANDED
+
+Test: Title2 
+Description: "I want to use this template for my feature file"
+Given: Robot position is 0.0 0.0 0.0 within sphere with radius 10.0 meter
+When: Battery level is equal to 100.0 percent
+When: Robot distance to 0 0 0 is lower then 10.0 meter
+When: Robot position is 0.0 0.0 0.0 within sphere with radius 10.0 meter
+Then: Robot state is LANDED
+

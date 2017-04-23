@@ -1,0 +1,10 @@
+---
+topics:
+  velocity: /fix_velocity
+  position: /ground_truth_to_tf/pose
+  application: /application
+  sonar: /sonar
+  simulator: /gazebo/model_states
+      
+simulatorbashpath: /home/ben/rosjava/src/drone/subb/src/main/java/bashFiles/startGazebo.sh
+applicationbashpath: /home/ben/rosjava/src/drone/subb/src/main/java/bashFiles/startApp.sh

@@ -1,0 +1,69 @@
+package com.github.drone.subb;
+
+import java.util.Map;
+
+public class Configuration {
+	
+	private Map<String, String> topics;
+	private String simulatorbashpath;
+	private String applicationbashpath;
+	
+	
+	public Map<String, String> getTopics(){
+		return topics;
+	}
+	
+	public void setTopics(Map<String, String> topics){
+		this.topics = topics;
+	}
+
+	public String getVelocity() {
+		return this.getTopics().get("velocity");
+	}
+
+
+	public String getLocation() {
+		return this.getTopics().get("position");
+	}
+	
+	public String getApplication() {
+		return this.getTopics().get("application");
+	}
+	
+	public String getSonar() {
+		return this.getTopics().get("sonar");
+	}
+	
+	public String getSimulator() {
+		return this.getTopics().get("simulator");
+	}
+	
+	public String getError() {
+		return this.getTopics().get("error");
+	}
+	
+	@Override
+	public String toString(){
+		return this.getVelocity().toString();
+	}
+	
+	public void setApplicationbashpath(String bash){
+		this.applicationbashpath = bash;
+	}
+
+	public String getApplicationbashpath() {
+		return applicationbashpath;
+	}
+	
+	public void setSimulatorbashpath(String bash){
+		this.simulatorbashpath = bash;
+	}
+	
+	public String getSimulatorbashpath() {
+		return simulatorbashpath;
+	}
+	
+	
+	
+	
+}
