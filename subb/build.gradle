@@ -15,7 +15,7 @@
  */
 /* This plugin is necessary for creating installApp tasks (i.e. executables) */
 plugins {
-    id 'org.xtext.builder' version '1.0.0'
+    id 'org.xtext.builder' version '1.0.17'
     id 'application'
     id 'java'
   }
