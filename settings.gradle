@@ -14,6 +14,5 @@
  * the License.
  */
 
+includeBuild '/home/ben/workspace/org.xtext.example.mylanguage.parent'
 include 'subb'
-include ":org.xtext.example.mylanguage"
-project(":org.xtext.example.mylanguage").projectdir = file(/home/ben/workspace/org.xtext.example.mylanguage)

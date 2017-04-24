@@ -63,8 +63,7 @@ dependencies {
   compile 'org.ros.rosjava_messages:hector_uav_msgs:0.3.3'
   compile 'org.yaml:snakeyaml:1.16'
   compile fileTree(dir: 'jars', include: '*.jar')
-  compile project(":org.xtext.example.mylanguage.parent")
-  xtextLanguages 'com.github.rosjava.drone:org.xtext.example.mylanguage.parent:0.1.0'
+  xtextLanguages 'org.xtext.example.mylanguage:org.xtext.example.mylanguage:1.0.0-SNAPSHOT'
   xtextLanguages 'org.eclipse.jdt:org.eclipse.jdt.core:3.12.2'
 }
 
