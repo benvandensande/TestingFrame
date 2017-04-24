@@ -194,7 +194,7 @@ public class SubscriberDrone extends AbstractNodeMain {
 	}
 
 	private void startTester(){
-		System.out.println("gaan");
+		System.out.prinln("gaaaaaaaaaaaaaan");
 		TesterThread test = new TesterThread(SubscriberDrone.getDrone(), app);
 		Thread t = new Thread(test);
 		t.start();
