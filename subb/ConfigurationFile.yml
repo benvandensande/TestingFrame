@@ -2,7 +2,8 @@
 topics:
   velocity: /fix_velocity
   position: /ground_truth_to_tf/pose
-  application: start
+  applicationStart: start
+  applicationStop: stop
   sonar: /sonar
   simulator: /gazebo/model_states
       

@@ -1,6 +1,5 @@
 package com.github.drone.subb;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,7 +29,6 @@ public class SubscriberDrone extends AbstractNodeMain {
 	private static Gazebo gazebo = null;
 	private static Application app = null;
 	private Configuration config = null;
-	private boolean alreadyStarted = false;
 
 	@Override
 	public GraphName getDefaultNodeName() {
@@ -155,7 +153,7 @@ public class SubscriberDrone extends AbstractNodeMain {
 	}
 
 	private void setupApplicationCommunication(ConnectedNode connectedNode) {
-		java.lang.String name = this.config.getApplication();
+		java.lang.String name = this.config.getApplicationStart();
 		connectedNode.newServiceServer(
 			    name, "std_srvs/Empty",
 			    new ServiceResponseBuilder<std_srvs.EmptyRequest,std_srvs.EmptyResponse>() {
@@ -165,19 +163,17 @@ public class SubscriberDrone extends AbstractNodeMain {
 					app.setRunning(true);
 					while(gazebo == null || !gazebo.isRunning()){Thread.yield();}
 					startTester();
-					System.out.println("done");
 				}
 			    }
 			);
-		
+		name = this.config.getApplicationStop();
 		connectedNode.newServiceServer(
-			    "stop", "std_srvs/Empty",
+			    name, "std_srvs/Empty",
 			    new ServiceResponseBuilder<std_srvs.EmptyRequest,std_srvs.EmptyResponse>() {
 
 				@Override
 				public void build(EmptyRequest arg0, EmptyResponse arg1) throws ServiceException {
 					app.setRunning(false);
-					System.out.println("done");
 				}
 			    }
 			);

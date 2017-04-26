@@ -26,8 +26,12 @@ public class Configuration {
 		return this.getTopics().get("position");
 	}
 	
-	public String getApplication() {
-		return this.getTopics().get("application");
+	public String getApplicationStart() {
+		return this.getTopics().get("applicationStart");
+	}
+	
+	public String getApplicationStop() {
+		return this.getTopics().get("applicationStop");
 	}
 	
 	public String getSonar() {
