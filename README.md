@@ -83,14 +83,6 @@ topics:
 
 applicationbashpath: /home/User/Documents/application.sh
 ```
-
-In the configurationfile the names of the topics are configured as explained above. But which messageType accompanies every topic?
-- applicationStart: std_srvs/Empty
-- applicationStop: std-srvs/Empty
-- simulator: gazebo_msgs/ModelStates
-- location: geometry_msgs/PoseStamped
-- velocity: geometry_msgs.Vector3Stamped
-- sonar: sensor_msgs.Range
     
 The third step is to make sure your application meet some prerequisites.
 ### Application requirements
@@ -107,6 +99,16 @@ The name of the rosservice is equal to value of the applicationStop key in the c
 The messagetype of the rosservice is std_srvs/Empty.
 The application should send an EmptyRequest.
 After the framework responsed with a EmptyResponse, it can shut down.
+
+Besides these requirements, your application has to take into account the message types of the ros topics it publishes to.
+In the configurationfile the names of the topics are configured. On the other hand are the message types of each topic fixed. The application has to publish a message to a particular topic with the correct message type of that topic.
+Next follows a listing of all the topics and their messagetype:
+- applicationStart  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; std_srvs/Empty
+- applicationStop   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; std-srvs/Empty
+- simulator         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; gazebo_msgs/ModelStates
+- location          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; geometry_msgs/PoseStamped
+- velocity          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; geometry_msgs.Vector3Stamped
+- sonar             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sensor_msgs.Range
 
     
 ### The test file
