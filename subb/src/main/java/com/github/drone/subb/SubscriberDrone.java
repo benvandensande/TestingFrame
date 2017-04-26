@@ -1,25 +1,28 @@
 package com.github.drone.subb;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+import org.ros.exception.ServiceException;
 import org.ros.message.MessageListener;
 import org.ros.message.Time;
 import org.ros.namespace.GraphName;
 import org.ros.node.AbstractNodeMain;
 import org.ros.node.ConnectedNode;
-import org.ros.node.topic.Publisher;
 import org.ros.node.topic.Subscriber;
+import org.ros.node.service.*;
 import org.yaml.snakeyaml.Yaml;
 
 import SimpleTester.TesterThread;
 import geometry_msgs.Point;
 import geometry_msgs.Pose;
-import std_msgs.String;
+import std_srvs.EmptyRequest;
+import std_srvs.EmptyResponse;
 
 public class SubscriberDrone extends AbstractNodeMain {
 
@@ -48,32 +51,17 @@ public class SubscriberDrone extends AbstractNodeMain {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		java.lang.String name = this.config.getApplication();
-		if(name != null){
-			final Publisher<std_msgs.String> applicationPub = 
-					connectedNode.newPublisher(name, std_msgs.String._TYPE);
-			final Subscriber<std_msgs.String> sub = 
-					connectedNode.newSubscriber(name, std_msgs.String._TYPE);
-			sub.addMessageListener(new MessageListener<std_msgs.String>() {
-				@Override
-				public void onNewMessage(std_msgs.String message) {
-					if(message.getData().equals("started") && !alreadyStarted){
-						alreadyStarted = true;
-						System.out.println("message received: " + message.getData());
-						while(gazebo == null || !gazebo.isRunning()){Thread.yield();}
-						startTester();
-						publish(applicationPub, "run");
-						System.out.println("message send: run");
-						app.setRunning(true);
-					}
-					else if(message.getData().equals("stopped")){
-						System.out.println("message received: " + message.getData());
-						app.setRunning(false);
-					}
-				}
-			});
-		}
+		setupApplicationCommunication(connectedNode);
+		setupSubscribers(connectedNode);
+		try {
+			initialize();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+	}
 
+	private void setupSubscribers(ConnectedNode connectedNode) {
+		java.lang.String name;
 		name = this.config.getLocation();
 		if(name != null){
 			Subscriber<geometry_msgs.PoseStamped> subscriberLocation = connectedNode.newSubscriber(drone.getName()+name, geometry_msgs.PoseStamped._TYPE);
@@ -164,15 +152,39 @@ public class SubscriberDrone extends AbstractNodeMain {
 				System.out.println(message.getPercentage());
 			}
 		});
+	}
 
-		try {
-			initialize();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
+	private void setupApplicationCommunication(ConnectedNode connectedNode) {
+		java.lang.String name = this.config.getApplication();
+		connectedNode.newServiceServer(
+			    name, "std_srvs/Empty",
+			    new ServiceResponseBuilder<std_srvs.EmptyRequest,std_srvs.EmptyResponse>() {
+
+				@Override
+				public void build(EmptyRequest arg0, EmptyResponse arg1) throws ServiceException {
+					app.setRunning(true);
+					while(gazebo == null || !gazebo.isRunning()){Thread.yield();}
+					startTester();
+					System.out.println("done");
+				}
+			    }
+			);
+		
+		connectedNode.newServiceServer(
+			    "stop", "std_srvs/Empty",
+			    new ServiceResponseBuilder<std_srvs.EmptyRequest,std_srvs.EmptyResponse>() {
+
+				@Override
+				public void build(EmptyRequest arg0, EmptyResponse arg1) throws ServiceException {
+					app.setRunning(false);
+					System.out.println("done");
+				}
+			    }
+			);
 	}
 
 	private void initialize() throws IOException {
+		System.out.println("init");
 		if(app == null){
 			app = new Application();
 			app.setPath(this.config.getApplicationbashpath());
@@ -187,17 +199,19 @@ public class SubscriberDrone extends AbstractNodeMain {
 	}
 
 	private void setupConfig() throws IOException {
-		Yaml yaml = new Yaml();
-		try(InputStream in = Files.newInputStream(Paths.get("/home/ben/rosjava/src/drone/subb/src/main/java/ConfigurationFile.yml"))){
+		File dir = new File(System.getProperty("user.dir"));
+        dir =  dir.getParentFile().getParentFile().getParentFile().getParentFile();
+        Yaml yaml = new Yaml();
+		try(InputStream in = Files.newInputStream(Paths.get(dir+ "/ConfigurationFile.yml"))){
 			this.config = yaml.loadAs( in,  Configuration.class);
 		}
 	}
 
 	private void startTester(){
-		System.out.println("gaan");
 		TesterThread test = new TesterThread(SubscriberDrone.getDrone(), app);
 		Thread t = new Thread(test);
 		t.start();
+		System.out.println("Tests running");
 	}
 
 	public static IDrone getDrone() {
@@ -206,11 +220,5 @@ public class SubscriberDrone extends AbstractNodeMain {
 
 	public void shutdown(){
 		gazebo.shutdown();
-	}
-
-	private void publish(Publisher<String> applicationPub, java.lang.String string) {
-		std_msgs.String str = applicationPub.newMessage();
-		str.setData(string);
-		applicationPub.publish(str);
 	}
 }

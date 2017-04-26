@@ -36,6 +36,8 @@ public class TesterThread extends Thread{
 			}
 			;
 		}
+		System.out.println("done running");
+		Runtime.getRuntime().exit(0);
 	}
 
 	public void addFeature(String featureLine) {

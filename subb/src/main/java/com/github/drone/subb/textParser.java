@@ -1,6 +1,7 @@
 package com.github.drone.subb;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -10,8 +11,10 @@ public class textParser {
 
 	
 	public void parseTestFiles(TesterThread cum) throws IOException{
-
-		BufferedReader br = new BufferedReader(new FileReader("/home/ben/rosjava/src/drone/subb/src/main/java/prop"));
+		
+		File dir = new File(System.getProperty("user.dir"));
+        dir =  dir.getParentFile().getParentFile().getParentFile().getParentFile();
+		BufferedReader br = new BufferedReader(new FileReader(dir+ "/prop"));
 		String line;
 		while ((line = br.readLine()) != null) {
 			if (line.equals("testfiles")){

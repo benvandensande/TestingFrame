@@ -1,14 +1,18 @@
 package com.github.drone.subb;
 
-import org.ros.message.MessageListener;
+import org.ros.exception.RemoteException;
+import org.ros.exception.ServiceNotFoundException;
 import org.ros.namespace.GraphName;
 import org.ros.node.AbstractNodeMain;
 import org.ros.node.ConnectedNode;
 import org.ros.node.NodeMain;
+import org.ros.node.service.ServiceClient;
+import org.ros.node.service.ServiceResponseListener;
 import org.ros.node.topic.Publisher;
-import org.ros.node.topic.Subscriber;
 
 import std_msgs.String;
+import std_srvs.EmptyRequest;
+import std_srvs.EmptyResponse;
 
 /**
  * A simple {@link Publisher} {@link NodeMain}.
@@ -24,19 +28,25 @@ public class PublisherDrone extends AbstractNodeMain {
 
 	@Override
 	public void onStart(final ConnectedNode connectedNode) {
-		final Publisher<std_msgs.String> applicationPub = 
-				connectedNode.newPublisher("/application", std_msgs.String._TYPE);
-		final Subscriber<std_msgs.String> sub = 
-				connectedNode.newSubscriber("/application", std_msgs.String._TYPE);
-		sub.addMessageListener(new MessageListener<std_msgs.String>() {
+		
+		ServiceClient<EmptyRequest, EmptyResponse> client;
+		try {
+			client = connectedNode.newServiceClient("start", "std_srvs/Empty");
+			std_srvs.EmptyRequest request = client.newMessage();
+			System.out.println(client);
 
-			@Override
-			public void onNewMessage(std_msgs.String message) {
-				if(message.getData().equals("run") && !running){
+	        client.call(request, new ServiceResponseListener<std_srvs.EmptyResponse>() {
+				@Override
+				public void onFailure(RemoteException arg0) {
+					System.out.println("fail");
+					
+				}
+
+				@Override
+				public void onSuccess(EmptyResponse arg0) {
 					running = true;
-					System.out.println("message received: " + message.getData());
 					final Publisher< geometry_msgs.Twist> publisher =
-							connectedNode.newPublisher("quadrotor/cmd_vel",  geometry_msgs.Twist._TYPE);
+					connectedNode.newPublisher("quadrotor/cmd_vel",  geometry_msgs.Twist._TYPE);
 					int i = 0;
 					while(i<1000){
 						publish(publisher, 0.3);
@@ -44,6 +54,7 @@ public class PublisherDrone extends AbstractNodeMain {
 						publish(publisher, 0.3);
 						i += 1;
 					}
+					
 					try {
 						Thread.sleep(5000);
 					} catch (InterruptedException e) {
@@ -56,24 +67,42 @@ public class PublisherDrone extends AbstractNodeMain {
 						publish(publisher, 0);
 						i += 1;
 					}
-					publish(applicationPub, "stopped");
-					Runtime.getRuntime().exit(0);
+					System.out.println("done");
+					
+					ServiceClient<EmptyRequest, EmptyResponse> stopClient;
+					try {
+						stopClient = connectedNode.newServiceClient("stop", "std_srvs/Empty");
+						std_srvs.EmptyRequest request = stopClient.newMessage();
+						System.out.println(stopClient);
+
+						stopClient.call(request, new ServiceResponseListener<std_srvs.EmptyResponse>() {
+							@Override
+							public void onFailure(RemoteException arg0) {
+								System.out.println("fail");
+								
+							}
+
+							@Override
+							public void onSuccess(EmptyResponse arg0) {
+								System.out.println("app was stopped");
+							}
+				        });
+						Runtime.getRuntime().exit(0);
+					
+					} catch (ServiceNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						Runtime.getRuntime().exit(0);
+					}
 				}
-			}
-		});
+	        });
 		
-		while(!running){
-			System.out.println("message send");
-			publish(applicationPub, "started");
+		} catch (ServiceNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			Runtime.getRuntime().exit(0);
 		}
 		
-		
-}
-
-	private void publish(Publisher<String> applicationPub, java.lang.String string) {
-		std_msgs.String str = applicationPub.newMessage();
-		str.setData(string);
-		applicationPub.publish(str);
 	}
 
 	private void publish(final Publisher<geometry_msgs.Twist> publisher, double d) {
