@@ -84,8 +84,9 @@ topics:
 applicationbashpath: /home/User/Documents/application.sh
 ```
     
-The third step is to make sure your application meet some prerequisites.
+
 ### Application requirements
+The third step is to make sure your application meet some prerequisites.
 When you want to test some features of the software that is controlling a UAV. Your application needs to:
 - be a rosnode
 - implement a serviceclient of a rosservice
