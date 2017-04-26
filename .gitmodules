@@ -1,0 +1,3 @@
+[submodule "DSLDrones"]
+	path = DSLDrones
+	url = https://github.com/benvandensande/DSLDrones.git
