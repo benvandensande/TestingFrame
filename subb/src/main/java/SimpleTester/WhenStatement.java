@@ -14,4 +14,10 @@ public class WhenStatement extends Statement {
 			return false;
 		}
 	}
+
+	@Override
+	void addToCategory(Test test) {
+		test.addWhen(this);
+		
+	}
 }

@@ -204,7 +204,7 @@ public class SubscriberDrone extends AbstractNodeMain {
 	}
 
 	private void startTester(){
-		TesterThread test = new TesterThread(SubscriberDrone.getDrone(), app);
+		TesterThread test = new TesterThread(SubscriberDrone.getDrone(), app, this);
 		Thread t = new Thread(test);
 		t.start();
 		System.out.println("Tests running");
@@ -215,6 +215,7 @@ public class SubscriberDrone extends AbstractNodeMain {
 	}
 
 	public void shutdown(){
-		gazebo.shutdown();
+		while(app.isRunning()){Thread.yield();}
+		Runtime.getRuntime().exit(0);
 	}
 }

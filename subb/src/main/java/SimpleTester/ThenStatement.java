@@ -10,4 +10,9 @@ public class ThenStatement extends Statement {
 	public boolean run() {
 		return this.data.runThen();
 	}
+
+	@Override
+	void addToCategory(Test test) {
+		test.addThen(this);
+	}
 }

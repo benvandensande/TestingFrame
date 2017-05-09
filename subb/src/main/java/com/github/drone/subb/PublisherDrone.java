@@ -2,6 +2,7 @@ package com.github.drone.subb;
 
 import org.ros.exception.RemoteException;
 import org.ros.exception.ServiceNotFoundException;
+import org.ros.message.Time;
 import org.ros.namespace.GraphName;
 import org.ros.node.AbstractNodeMain;
 import org.ros.node.ConnectedNode;
@@ -10,7 +11,6 @@ import org.ros.node.service.ServiceClient;
 import org.ros.node.service.ServiceResponseListener;
 import org.ros.node.topic.Publisher;
 
-import std_msgs.String;
 import std_srvs.EmptyRequest;
 import std_srvs.EmptyResponse;
 
@@ -18,8 +18,6 @@ import std_srvs.EmptyResponse;
  * A simple {@link Publisher} {@link NodeMain}.
  */
 public class PublisherDrone extends AbstractNodeMain {
-	
-	private boolean running = false;
 
 	@Override
 	public GraphName getDefaultNodeName() {
@@ -44,7 +42,6 @@ public class PublisherDrone extends AbstractNodeMain {
 
 				@Override
 				public void onSuccess(EmptyResponse arg0) {
-					running = true;
 					final Publisher< geometry_msgs.Twist> publisher =
 					connectedNode.newPublisher("quadrotor/cmd_vel",  geometry_msgs.Twist._TYPE);
 					int i = 0;
@@ -74,7 +71,8 @@ public class PublisherDrone extends AbstractNodeMain {
 						stopClient = connectedNode.newServiceClient("stop", "std_srvs/Empty");
 						std_srvs.EmptyRequest request = stopClient.newMessage();
 						System.out.println(stopClient);
-
+						Time time = connectedNode.getCurrentTime();
+						while(time.secs < 15){}
 						stopClient.call(request, new ServiceResponseListener<std_srvs.EmptyResponse>() {
 							@Override
 							public void onFailure(RemoteException arg0) {

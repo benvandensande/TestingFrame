@@ -16,4 +16,10 @@ public class GivenStatement extends Statement {
 			return false;
 		}
 	}
+
+	@Override
+	void addToCategory(Test test) {
+		test.addGiven(this);
+		
+	}
 }
