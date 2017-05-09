@@ -10,4 +10,6 @@ public abstract class Statement {
 
 	abstract boolean run();
 
+	abstract void addToCategory(Test test);
+
 }

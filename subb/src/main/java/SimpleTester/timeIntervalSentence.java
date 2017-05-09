@@ -10,36 +10,45 @@ public class timeIntervalSentence extends Sentence {
 	
 	private double first;
 	private double second;
-	private Application app;
-	private IDrone drone;
-	
+	private Test test;
 
-	public timeIntervalSentence(Unit fst, Unit scnd, Application app, IDrone drone){
+	public timeIntervalSentence(Unit fst, Unit scnd, Application app, IDrone drone, Test test){
+		super(app,drone);
 		this.first = fst.getValue();
 		this.second = scnd.getValue();
-		this.app = app;
-		this.drone = drone;
+		this.test = test;
 	}
 
 	@Override
 	public boolean runGiven() throws InterruptedException {
-		Thread t = new Thread(new ObserverTime(drone, app, this.first, this.second));
-		t.start();
-		t.join();
-		return true;
+		
+		if(this.getApp().getSimulationTime().toSeconds() >= this.first && this.getApp().getSimulationTime().toSeconds() <= this.second){
+			return true;
+		}
+		return false;
+//		Thread t = new Thread(new ObserverTime(getDrone(), getApp(), this.first, this.second));
+//		t.start();
+//		t.join();
+//		return true;
 	}
 
 	@Override
 	public boolean runWhen() throws InterruptedException {
-		Thread t = new Thread(new ObserverTime(drone, app, this.first, this.second));
-		t.start();
-		t.join();
-		return true;
+		if(this.getApp().getSimulationTime().toSeconds() >= this.first && this.getApp().getSimulationTime().toSeconds() <= this.second){
+			this.test.setFirst(this.first);
+			this.test.setSecond(this.second);
+			return true;
+		}
+		return false;
+//		Thread t = new Thread(new ObserverTime(getDrone(), getApp(), this.first, this.second));
+//		t.start();
+//		t.join();
+//		return true;
 	}
 
 	@Override
 	public boolean runThen() {
-		double simulationTime = this.app.getSimulationTime().toSeconds();
+		double simulationTime = this.getApp().getSimulationTime().toSeconds();
 		if(simulationTime >= this.first && simulationTime <= this.second){
 			return true;
 		}

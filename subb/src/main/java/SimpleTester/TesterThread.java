@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import com.github.drone.subb.Application;
 import com.github.drone.subb.IDrone;
+import com.github.drone.subb.SubscriberDrone;
 import com.github.drone.subb.textParser;
 
 public class TesterThread extends Thread{
@@ -12,10 +13,12 @@ public class TesterThread extends Thread{
 	private IDrone drone;
 	private ArrayList<String> features;
 	private Application app;
+	private SubscriberDrone sub;
 
-	public TesterThread (IDrone drone, Application app){
+	public TesterThread (IDrone drone, Application app, SubscriberDrone subb){
 		this.drone = drone;
 		this.app = app;
+		this.sub = subb;
 		this.features = new ArrayList<String>();
 		try {
 			new textParser().parseTestFiles(this);
@@ -37,7 +40,7 @@ public class TesterThread extends Thread{
 			;
 		}
 		System.out.println("done running");
-		Runtime.getRuntime().exit(0);
+		sub.shutdown();
 	}
 
 	public void addFeature(String featureLine) {
