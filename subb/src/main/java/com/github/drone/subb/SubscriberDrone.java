@@ -112,12 +112,12 @@ public class SubscriberDrone extends AbstractNodeMain {
 				SubscriberDrone.app.setSimulationTime(time);
 			}
 		});
-		Subscriber< geometry_msgs.Vector3> subscriberWind = connectedNode.newSubscriber("wind", geometry_msgs.Vector3._TYPE);
+		Subscriber< geometry_msgs.Vector3> subscriberWind = connectedNode.newSubscriber("/wind", geometry_msgs.Vector3._TYPE);
 		subscriberWind.addMessageListener(new MessageListener< geometry_msgs.Vector3>() {
 
 			@Override
 			public void onNewMessage( geometry_msgs.Vector3 message) {
-				System.out.println(message.getX());
+				System.out.println("wind: " + message.getX());
 				getDrone().getEnvironnement().setWindSpeed(message);
 			}
 		});
@@ -141,8 +141,19 @@ public class SubscriberDrone extends AbstractNodeMain {
 				}
 			});
 		}
+		name = this.config.getBarometer();
+		if(name != null){
+			Subscriber<geometry_msgs.PointStamped> subscriberBarometer = connectedNode.newSubscriber(drone.getName()+ name, geometry_msgs.PointStamped._TYPE);
+			subscriberBarometer.addMessageListener(new MessageListener<geometry_msgs.PointStamped>() {
+				@Override
+				public void onNewMessage(geometry_msgs.PointStamped message) {
+					//System.out.println(message.getPoint().getZ());
+					getDrone().BaroReading(message.getPoint());
+				}
+			});
+		}
 		//TODO battery message are not comming true
-		Subscriber<sensor_msgs.BatteryState> subscriberBattery = connectedNode.newSubscriber(drone.getName()+"/sonar", sensor_msgs.BatteryState._TYPE);
+		Subscriber<sensor_msgs.BatteryState> subscriberBattery = connectedNode.newSubscriber(drone.getName()+"/battery", sensor_msgs.BatteryState._TYPE);
 		subscriberBattery.addMessageListener(new MessageListener<sensor_msgs.BatteryState>() {
 			@Override
 			public void onNewMessage(sensor_msgs.BatteryState message) {

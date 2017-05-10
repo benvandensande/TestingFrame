@@ -45,6 +45,9 @@ public class Configuration {
 	public String getError() {
 		return this.getTopics().get("error");
 	}
+	public String getBarometer() {
+		return this.getTopics().get("barometer");
+	}
 	
 	@Override
 	public String toString(){
@@ -66,6 +69,8 @@ public class Configuration {
 	public String getSimulatorbashpath() {
 		return simulatorbashpath;
 	}
+
+	
 	
 	
 	

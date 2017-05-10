@@ -21,8 +21,12 @@ public class Environnement {
 	}
 
 	public double getAbsoluteWindVelocity() {
-		return 0;
-		//return Math.sqrt(Math.pow(this.windSpeed.getX(), 2) + Math.pow(this.windSpeed.getY(), 2) + Math.pow(this.windSpeed.getZ(), 2));
+		if(windSpeed == null){
+			return 0;
+		}
+		else{
+			return Math.sqrt(Math.pow(this.windSpeed.getX(), 2) + Math.pow(this.windSpeed.getY(), 2) + Math.pow(this.windSpeed.getZ(), 2));
+		}
 	}
 
 	public Vector3 getWindSpeed() {

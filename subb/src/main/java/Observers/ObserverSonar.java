@@ -15,9 +15,9 @@ public class ObserverSonar extends ObserverWithLogic {
 
 	@Override
 	protected void runLower() {
-		float sonar = drone.getSonar();
+		float sonar = drone.getSonarReading();
 		while(sonar > this.boundary && application.isRunning()){
-			sonar = drone.getSonar();
+			sonar = drone.getSonarReading();
 			Thread.yield();
 		}
 		System.out.println("Sonar");
@@ -26,9 +26,9 @@ public class ObserverSonar extends ObserverWithLogic {
 
 	@Override
 	protected void runHigher() {
-		float sonar = drone.getSonar();
+		float sonar = drone.getSonarReading();
 		while(sonar < this.boundary && application.isRunning()){
-			sonar = drone.getSonar();
+			sonar = drone.getSonarReading();
 			Thread.yield();
 		}
 		System.out.println("Sonar");

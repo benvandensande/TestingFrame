@@ -24,7 +24,7 @@ public interface IDrone {
 	public boolean hasGPSSignal();
 	public void GPSSignal(boolean serviceGps);
 	public void SonarReading(float range);
-	public float getSonar();
+	public float getSonarReading();
 	List<Point> getTakeOffTrajectory();
 	public void addTrajectory(String name, String call);
 	public Environnement getEnvironnement();
@@ -32,4 +32,6 @@ public interface IDrone {
 	public String getName();
 	public void setName(String name);
 	public double getClosestDistanceToObs();
+	public void BaroReading(Point point);
+	public double getBaroReading();
 }

@@ -22,6 +22,7 @@ public class Drone implements IDrone{
 	private double batteryPercentage = 100;
 	private boolean gpsSignal = false;
 	private float sonarReading = Float.MAX_VALUE;
+	private Point baroReading = null;
 	private Environnement environnement = null;
 	double minSpeed = 0.2;
 	private String name = "";
@@ -180,7 +181,7 @@ public class Drone implements IDrone{
 	}
 
 	@Override
-	public float getSonar() {
+	public float getSonarReading() {
 		return this.sonarReading;
 	}
 	
@@ -200,6 +201,18 @@ public class Drone implements IDrone{
 	@Override
 	public double getClosestDistanceToObs() {
 		return this.getEnvironnement().getClosestDistanceToObject(this.location);
+	}
+
+	@Override
+	public void BaroReading(Point point) {
+		this.baroReading = point;
+		
+	}
+	
+	@Override
+	public double getBaroReading() {
+		return this.baroReading.getZ();
+		
 	}
 
 }

@@ -97,15 +97,15 @@ The application should send an rosjava_test_msgs.AddTwoIntsRequest.
 After the framework responsed with a rosjava_test_msgs.AddTwoIntsResponse, It can start executing at the point that the rostime equals the response of the framework.
 - call a rosservice to let the framework know it is done.
 The name of the rosservice is equal to value of the applicationStop key in the configuration file.
-The messagetype of the rosservice is rosjava_test_msgs/AddTwoInts.
-The application should send an rosjava_test_msgs.AddTwoIntsRequest.
-After the framework responsed with a rosjava_test_msgs.AddTwoIntsResponse, it can shut down.
+The messagetype of the rosservice is std_srvs/Empty.
+The application should send an std_srvs.EmptyRequest.
+After the framework responsed with astd_srvs.EmptyResponse, it can shut down.
 
 Besides these requirements, your application has to take into account the message types of the ros topics it publishes to.
 In the configurationfile the names of the topics are configured. On the other hand are the message types of each topic fixed. The application has to publish a message to a particular topic with the correct message type of that topic.
 Next follows a listing of all the topics and their messagetype:
 - applicationStart  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rosjava_test_msgs/AddTwoInts
-- applicationStop   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rosjava_test_msgs/AddTwoInts
+- applicationStop   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; std_srvs/Empty
 - simulator         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; gazebo_msgs/ModelStates
 - location          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; geometry_msgs/PoseStamped
 - velocity          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; geometry_msgs.Vector3Stamped
