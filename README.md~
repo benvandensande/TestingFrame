@@ -14,8 +14,7 @@ This can be done by running these commands in the terminal:
 ```
 $ git clone --recursive https://github.com/benvandensande/TestingFrame.git
 $ cd TestingFrame
-$ ./gradlew
-$ gradle installDist
+$ ./gradlew installDist
 ```
 
 ## Workflow
@@ -26,7 +25,7 @@ The second step consist of writing a configuration file, discussed in the subsec
 The third step is making sure your application meet some requirements based on the configuration file.
 The fourth step is the writing of the actual testfile.
 
-###Configuration file
+### Configuration file
 The configuration file is the place to define the things the software needs to run the test in a correct way.
 One thing it contains is the information about the topics that have to be subscribed for a specific test of the drone.
 Another thing you have to include in a configurationfile is the path to the bashfile that runs your application.
@@ -34,7 +33,7 @@ The configurationfile is written in [Yaml](http://www.yaml.org).
 To create a new configurationfile, just create a new file, name it 'Configuration.Yaml'.
 Below an example is provided with all the necessary things, so that the testfile can be run.
 
-####Example of the necessary thing of the configurationfile
+#### Example of the necessary thing of the configurationfile
 ```
 ---
 topics:
@@ -62,7 +61,7 @@ The whiteline between simulator and applicationbashpath is necessary as is the i
 Yaml knows that the map is finished by the whiteline.
 All the things defined and explained above are all necessary and can not be left out of any configuration file.
 
-####Optional additions to topics
+#### Optional additions to topics
 
 Besides the application and simulator topic defined above you can add topics for the following:
 - position
@@ -75,7 +74,8 @@ An example of a configuration file with additional topics:
 ```
 ---
 topics:
-    application: /application
+    applicationStart: start
+    applicationStop: stop
     simulator: /gazebo_modelstates
     location: /fix
     velocity: /ground_truth
@@ -83,33 +83,36 @@ topics:
 
 applicationbashpath: /home/User/Documents/application.sh
 ```
-
-In the configurationfile the names of the topics are configured as explained above. But which messageType accompanies every topic?
-- applicationStart: std_srvs/Empty
-- applicationStop: std-srvs/Empty
-- simulator: gazebo_msgs/ModelStates
-- location: geometry_msgs/PoseStamped
-- velocity: geometry_msgs.Vector3Stamped
-- sonar: sensor_msgs.Range
     
+
+### Application requirements
 The third step is to make sure your application meet some prerequisites.
-###Application requirements
 When you want to test some features of the software that is controlling a UAV. Your application needs to:
 - be a rosnode
 - implement a serviceclient of a rosservice
 - call a rosservice to let the framework know it is ready.
 The name of the rosservice is equal to value of the applicationStart key in the configuration file.
-The messagetype of the rosservice is std_srvs/Empty.
-The application should send an EmptyRequest.
-After the framework responsed with a EmptyResponse, It can start executing.
+The messagetype of the rosservice is rosjava_test_msgs/AddTwoInts.
+The application should send an rosjava_test_msgs.AddTwoIntsRequest.
+After the framework responsed with a rosjava_test_msgs.AddTwoIntsResponse, It can start executing at the point that the rostime equals the response of the framework.
 - call a rosservice to let the framework know it is done.
 The name of the rosservice is equal to value of the applicationStop key in the configuration file.
-The messagetype of the rosservice is std_srvs/Empty.
-The application should send an EmptyRequest.
-After the framework responsed with a EmptyResponse, it can shut down.
+The messagetype of the rosservice is rosjava_test_msgs/AddTwoIntsTYPE.
+The application should send an rosjava_test_msgs.AddTwoIntsRequest.
+After the framework responsed with a rosjava_test_msgs.AddTwoIntsResponse, it can shut down.
+
+Besides these requirements, your application has to take into account the message types of the ros topics it publishes to.
+In the configurationfile the names of the topics are configured. On the other hand are the message types of each topic fixed. The application has to publish a message to a particular topic with the correct message type of that topic.
+Next follows a listing of all the topics and their messagetype:
+- applicationStart  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rosjava_test_msgs/AddTwoInts
+- applicationStop   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rosjava_test_msgs/AddTwoInts
+- simulator         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; gazebo_msgs/ModelStates
+- location          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; geometry_msgs/PoseStamped
+- velocity          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; geometry_msgs.Vector3Stamped
+- sonar             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sensor_msgs.Range
 
     
-###The test file
+### The test file
 The test file consist of one or several test(s).
 A test starts with a title and has a body. There is also the possibility to provide a short description of the test, but this is not mandatory.
 Important to know is that all the tests, defined in one testfile, run in one applicationrun. This means when you run two testfiles, each of them is ran
@@ -123,16 +126,16 @@ These steps make up the part of the body of the test. One thing that is truelly 
 The first steps that are defined are none, one or more Given-steps, followed by none, one or more When-steps and then none, one or more Then-steps.
 Make sure you follow this order!
 
-####Given
+#### Given
 The Given-step is used to define the preconditions of the test.
 These are conditions that have to be met before the test can actually be successfull.
 To define a new Given-step, use the keyword 'Given' followed by a ':'.
 
-####When
+#### When
 The When-step is the step to define the conditions of the test.
 To define a new When-step, use the keyword 'When' followed by a ':'.
   
-####Then
+#### Then
 The Then-step are the postconditions, the conditions that have to be true when the conditions of the When-step are met.
 To define a new Then-step, use the keyword 'Then' followed by a ':'.
 
@@ -192,7 +195,7 @@ The last part of the format is optional, this is showed by surrounding it with b
 The first variation specifies a numerical tolerance. The second and third are tolerance for positions. 
 This way it is checkable if a position is within a sphere or circle with a specified radius.
 
-###PropertyFile
+### PropertyFile
 The propertyfile is used to provide the names of the testfiles you want to run.
 In order to do this, create a new textfile and use the following format:
 ```
@@ -209,7 +212,7 @@ tests
 takeOff
 tests
 
-##Run
+## Run
 After creating a configuration file, testfiles and a property file, you can now run the tests.
 To run the code open a new terminal and run
 ```
