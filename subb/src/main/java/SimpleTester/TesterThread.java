@@ -3,6 +3,8 @@ package SimpleTester;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.ros.node.ConnectedNode;
+
 import com.github.drone.subb.Application;
 import com.github.drone.subb.IDrone;
 import com.github.drone.subb.SubscriberDrone;
@@ -14,11 +16,15 @@ public class TesterThread extends Thread{
 	private ArrayList<String> features;
 	private Application app;
 	private SubscriberDrone sub;
+	private ConnectedNode con;
+	private int startTime = 0;
 
-	public TesterThread (IDrone drone, Application app, SubscriberDrone subb){
+	public TesterThread (IDrone drone, Application app, SubscriberDrone subb, ConnectedNode con, int startTime){
 		this.drone = drone;
 		this.app = app;
 		this.sub = subb;
+		this.con = con;
+		this.startTime = startTime;
 		this.features = new ArrayList<String>();
 		try {
 			new textParser().parseTestFiles(this);
@@ -29,6 +35,9 @@ public class TesterThread extends Thread{
 	
 	@Override
 	public void run(){
+		System.out.println("waiting");
+		while(this.con.getCurrentTime().secs < startTime){}
+		System.out.println("Tests running");
 		for(String feature:features){
 			Thread t = new Thread(new FeatureTester(feature, this.drone, this.app));
 			t.start();

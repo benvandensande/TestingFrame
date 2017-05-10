@@ -20,6 +20,8 @@ import org.yaml.snakeyaml.Yaml;
 import SimpleTester.TesterThread;
 import geometry_msgs.Point;
 import geometry_msgs.Pose;
+import rosjava_test_msgs.AddTwoIntsRequest;
+import rosjava_test_msgs.AddTwoIntsResponse;
 import std_srvs.EmptyRequest;
 import std_srvs.EmptyResponse;
 
@@ -29,6 +31,7 @@ public class SubscriberDrone extends AbstractNodeMain {
 	private static Gazebo gazebo = null;
 	private static Application app = null;
 	private Configuration config = null;
+	private static ConnectedNode conNode = null;
 
 	@Override
 	public GraphName getDefaultNodeName() {
@@ -44,6 +47,7 @@ public class SubscriberDrone extends AbstractNodeMain {
 		//			e.printStackTrace();
 		//		}
 		drone.setName("quadrotor");
+		conNode = connectedNode;
 		try {
 			setupConfig();
 		} catch (IOException e1) {
@@ -155,14 +159,19 @@ public class SubscriberDrone extends AbstractNodeMain {
 	private void setupApplicationCommunication(ConnectedNode connectedNode) {
 		java.lang.String name = this.config.getApplicationStart();
 		connectedNode.newServiceServer(
-			    name, "std_srvs/Empty",
-			    new ServiceResponseBuilder<std_srvs.EmptyRequest,std_srvs.EmptyResponse>() {
+			    name, rosjava_test_msgs.AddTwoInts._TYPE,
+			    new ServiceResponseBuilder<rosjava_test_msgs.AddTwoIntsRequest,rosjava_test_msgs.AddTwoIntsResponse>() {
 
 				@Override
-				public void build(EmptyRequest arg0, EmptyResponse arg1) throws ServiceException {
+				public void build(AddTwoIntsRequest arg0, AddTwoIntsResponse arg1) throws ServiceException {
+					
 					app.setRunning(true);
 					while(gazebo == null || !gazebo.isRunning()){Thread.yield();}
-					startTester();
+					ConnectedNode con = SubscriberDrone.getConNode();
+					int startTime = con.getCurrentTime().secs + 5;
+					arg1.setSum(startTime);
+					startTester(con, startTime);
+					
 				}
 			    }
 			);
@@ -203,19 +212,23 @@ public class SubscriberDrone extends AbstractNodeMain {
 		}
 	}
 
-	private void startTester(){
-		TesterThread test = new TesterThread(SubscriberDrone.getDrone(), app, this);
+	private void startTester(ConnectedNode con, int startTime){
+		TesterThread test = new TesterThread(SubscriberDrone.getDrone(), app, this, con, startTime);
 		Thread t = new Thread(test);
 		t.start();
-		System.out.println("Tests running");
 	}
 
 	public static IDrone getDrone() {
 		return drone;
+	}
+	
+	public static ConnectedNode getConNode() {
+		return conNode;
 	}
 
 	public void shutdown(){
 		while(app.isRunning()){Thread.yield();}
 		Runtime.getRuntime().exit(0);
 	}
+	
 }

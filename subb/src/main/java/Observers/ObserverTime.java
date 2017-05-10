@@ -27,8 +27,8 @@ public class ObserverTime extends Observer {
 
 	}
 
-	private boolean liesWithin(Time simulationTime) {
-		if(simulationTime.toSeconds() >= this.first && simulationTime.toSeconds() <= this.second){
+	private boolean liesWithin(int simulationTime) {
+		if(simulationTime >= this.first && simulationTime <= this.second){
 			return true;
 		}
 		return false;
