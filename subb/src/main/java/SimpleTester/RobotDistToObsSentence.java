@@ -43,6 +43,7 @@ public class RobotDistToObsSentence  extends Sentence {
 	@Override
 	public boolean runThen() {
 		double dist = getDrone().getClosestDistanceToObs();
+		System.out.println("Dist: " + dist);
 		boolean bool = this.sent.run(dist);
 		if(!bool ){
 			return false;

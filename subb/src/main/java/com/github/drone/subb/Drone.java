@@ -24,9 +24,10 @@ public class Drone implements IDrone{
 	private float sonarReading = Float.MAX_VALUE;
 	private Environnement environnement = null;
 	double minSpeed = 0.2;
-	private String name = "quadrotor";
+	private String name = "";
 	
-	public Drone(){
+	public Drone(String name){
+		this.name = name;
 		this.state = DroneState.LANDED;
 		this.trajectory = new ArrayList<Point>();
 		this.takeOffTrajectory = new ArrayList<Point>();
@@ -198,8 +199,7 @@ public class Drone implements IDrone{
 
 	@Override
 	public double getClosestDistanceToObs() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.getEnvironnement().getClosestDistanceToObject(this.location);
 	}
 
 }

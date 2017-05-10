@@ -27,7 +27,7 @@ import std_srvs.EmptyResponse;
 
 public class SubscriberDrone extends AbstractNodeMain {
 
-	private static IDrone drone = new Drone();
+	private static IDrone drone = new Drone("quadrotor");
 	private static Gazebo gazebo = null;
 	private static Application app = null;
 	private Configuration config = null;
@@ -84,16 +84,11 @@ public class SubscriberDrone extends AbstractNodeMain {
 			subscriberGazebo.addMessageListener(new MessageListener<gazebo_msgs.ModelStates>() {
 				@Override
 				public void onNewMessage(gazebo_msgs.ModelStates message) {
+					//System.out.println(message.getName());
 					if(message.getName().contains("quadrotor")){
-						subscriberGazebo.shutdown();
+						//subscriberGazebo.shutdown();
 						List<Pose> poseLst = message.getPose();
-						if(poseLst.size() > 2){
-							List<Pose> newLst = poseLst.subList(2, poseLst.size()-1);
-							for (Pose pose:newLst){
-								System.out.println("object at: " + pose);
-								drone.getEnvironnement().addObjectToEnvironnemnt(new Object(null, pose.getPosition()));
-							}
-						}
+						drone.getEnvironnement().addObjectsToEnvironnemnt(poseLst,message.getName());
 						gazebo.setRunning(true);
 					};
 				}

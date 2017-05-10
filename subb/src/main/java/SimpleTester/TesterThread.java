@@ -35,9 +35,8 @@ public class TesterThread extends Thread{
 	
 	@Override
 	public void run(){
-		System.out.println("waiting");
 		while(this.con.getCurrentTime().secs < startTime){}
-		System.out.println("Tests running");
+		System.out.println("Testing Framework started");
 		for(String feature:features){
 			Thread t = new Thread(new FeatureTester(feature, this.drone, this.app));
 			t.start();
