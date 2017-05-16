@@ -27,6 +27,7 @@ public class PublisherDrone extends AbstractNodeMain {
 	@Override
 	public void onStart(final ConnectedNode connectedNode) {
 		
+		//TODO make apart class for starting app
 		ServiceClient<rosjava_test_msgs.AddTwoIntsRequest, rosjava_test_msgs.AddTwoIntsResponse> client;
 		try {
 			client = connectedNode.newServiceClient("start", rosjava_test_msgs.AddTwoInts._TYPE);

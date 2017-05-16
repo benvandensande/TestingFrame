@@ -15,6 +15,7 @@ public class Test extends Thread {
 	private List<Statement> thenStatements = new ArrayList<Statement>();
 	private double first = Double.NaN;
 	private double second = Double.NaN;
+	//TODO maximum time for running test for recovery application crash
 
 	public Test(String name, String description, Application app) {
 		this.name = name;
@@ -49,7 +50,7 @@ public class Test extends Thread {
 				}else{
 					System.out.println("in then long");
 					while(result && checkBoundaries() && this.app.isRunning()){
-						
+						//TODO add little sleep(25milliseconds)
 						result = checkThenStatements(result);
 					}
 				}

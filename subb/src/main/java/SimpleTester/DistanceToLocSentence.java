@@ -3,7 +3,6 @@ package SimpleTester;
 import com.github.drone.subb.Application;
 import com.github.drone.subb.IDrone;
 
-import Observers.ObserverDistance;
 import geometry_msgs.Point;
 
 public class DistanceToLocSentence extends Sentence {

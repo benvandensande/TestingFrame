@@ -1,15 +1,20 @@
 package SimpleTester;
 
 import com.github.drone.subb.Application;
+import com.github.drone.subb.ComponentStatus;
 import com.github.drone.subb.IDrone;
 
-public class BatterySentence extends Sentence {
+public class BatterySentence extends ComponentSentence {
 
 	private ComparativeSentence sent = null;
 
 	public BatterySentence(ComparativeSentence sent, Application app, IDrone drone) {
 		super(app,drone);
 		this.sent = sent;
+	}
+	
+	public BatterySentence(Application app, IDrone drone) {
+		super(app,drone);
 	}
 
 	public boolean runGiven() throws InterruptedException {
@@ -30,5 +35,11 @@ public class BatterySentence extends Sentence {
 
 	public boolean runThen() {
 		return this.sent.run(this.getDrone().getBatteryPerc());
+	}
+
+	@Override
+	public boolean checkStatus(ComponentStatus status) {
+		// TODO Auto-generated method stub
+		return true;
 	}
 }
