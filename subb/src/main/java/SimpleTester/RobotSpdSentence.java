@@ -18,14 +18,17 @@ public class RobotSpdSentence extends Sentence {
 	}
 
 	public boolean runGiven() throws InterruptedException {
+		//TODO
 		return true;
 	}
 
 	public boolean runWhen() throws InterruptedException {
+		//TODO
 		return true;
 	}
 
 	public boolean runThen() {
+		//TODO
 		return true;
 	}
 }

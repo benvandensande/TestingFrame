@@ -123,6 +123,5 @@ public class Test extends Thread {
 	public void setSecond(double s) {
 		this.second = s;
 	}
-	
-	
+		
 }

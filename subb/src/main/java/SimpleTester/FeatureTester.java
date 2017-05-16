@@ -25,30 +25,14 @@ public class FeatureTester extends Thread {
 		Object instance = null;
 		try {
 			clazz = Class.forName("features."+this.getFeature());
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		
-		Constructor<?> constructor = null;
-		try {
+			Constructor<?> constructor = null;
 			constructor = clazz.getConstructor(IDrone.class, Application.class);
-		} catch (NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
-		}
-		try {
 			instance = constructor.newInstance(this.drone, this.app);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		
-		try {
 			clazz.getMethod("run").invoke(instance);
-		} catch (NoSuchMethodException | SecurityException | 
-				IllegalAccessException | IllegalArgumentException 
-				| InvocationTargetException e) {
-			e.printStackTrace();
-		} 
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | ClassNotFoundException | NoSuchMethodException | SecurityException e) {
+			System.out.println("Failed to run test: " + this.getFeature() + " | TestFile not found");
+		}
 	}
 
 	private String getFeature(){
