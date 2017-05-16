@@ -7,6 +7,7 @@ topics:
   sonar: /sonar_height
   barometer: /pressure_height
   simulator: /gazebo/model_states
+  gps: /fix
       
 simulatorbashpath: /home/ben/rosjava/src/drone/subb/src/main/java/bashFiles/startGazebo.sh
 applicationbashpath: /home/ben/rosjava/src/drone/subb/src/main/java/bashFiles/startApp.sh

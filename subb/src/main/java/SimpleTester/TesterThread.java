@@ -37,15 +37,19 @@ public class TesterThread extends Thread{
 	public void run(){
 		while(this.con.getCurrentTime().secs < startTime){}
 		System.out.println("Testing Framework started");
+		ArrayList<Thread> threads = new ArrayList<Thread>();
+		
 		for(String feature:features){
 			Thread t = new Thread(new FeatureTester(feature, this.drone, this.app));
 			t.start();
+			threads.add(t);
+		}
+		for(int i = 0; i < threads.size(); i++){
 			try {
-				t.join();
+				threads.get(i).join();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			;
 		}
 		System.out.println("done running");
 		sub.shutdown();

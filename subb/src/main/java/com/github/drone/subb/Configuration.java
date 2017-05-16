@@ -49,6 +49,10 @@ public class Configuration {
 		return this.getTopics().get("barometer");
 	}
 	
+	public String getGPS() {
+		return this.getTopics().get("gps");
+	}
+	
 	@Override
 	public String toString(){
 		return this.getVelocity().toString();
@@ -69,6 +73,8 @@ public class Configuration {
 	public String getSimulatorbashpath() {
 		return simulatorbashpath;
 	}
+
+	
 
 	
 	

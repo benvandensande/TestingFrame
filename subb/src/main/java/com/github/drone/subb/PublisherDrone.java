@@ -44,6 +44,7 @@ public class PublisherDrone extends AbstractNodeMain {
 				@Override
 				public void onSuccess(rosjava_test_msgs.AddTwoIntsResponse arg0) {
 					while(connectedNode.getCurrentTime().secs < arg0.getSum()){}
+					System.out.println("***app started");
 					final Publisher< geometry_msgs.Twist> publisher =
 					connectedNode.newPublisher("quadrotor/cmd_vel",  geometry_msgs.Twist._TYPE);
 					int i = 0;

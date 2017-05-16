@@ -34,10 +34,7 @@ public class BaroSentence extends ComponentSentence {
 
 	@Override
 	public boolean checkStatus(ComponentStatus status) {
-		//TODO
-		this.getDrone();
-		return true;
-		
+		return this.getDrone().getBaroStatus().equals(status);
 	}
 
 }

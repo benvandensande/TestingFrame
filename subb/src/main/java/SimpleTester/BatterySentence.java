@@ -39,7 +39,6 @@ public class BatterySentence extends ComponentSentence {
 
 	@Override
 	public boolean checkStatus(ComponentStatus status) {
-		// TODO Auto-generated method stub
-		return true;
+		return this.getDrone().getBatteryStatus().equals(status);
 	}
 }

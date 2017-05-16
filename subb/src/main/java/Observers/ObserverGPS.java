@@ -13,12 +13,12 @@ public class ObserverGPS extends Observer {
 	
 	@Override
 	public void run(){
-		boolean hasGPS = drone.hasGPSSignal();
-		while(hasGPS && application.isRunning()){
-			hasGPS = drone.hasGPSSignal();
-			Thread.yield();
-		}
-		System.out.println("NoGPS");
+//		boolean hasGPS = drone.hasGPSSignal();
+//		while(hasGPS && application.isRunning()){
+//			hasGPS = drone.hasGPSSignal();
+//			Thread.yield();
+//		}
+//		System.out.println("NoGPS");
 	}
 
 }

@@ -94,15 +94,19 @@ public class SubscriberDrone extends AbstractNodeMain {
 				}
 			});
 		}
-		Subscriber<sensor_msgs.NavSatFix> subscriberGPS = connectedNode.newSubscriber(drone.getName()+"/fix", sensor_msgs.NavSatFix._TYPE);
-		subscriberGPS.addMessageListener(new MessageListener<sensor_msgs.NavSatFix>() {
-
-			@Override
-			public void onNewMessage(sensor_msgs.NavSatFix message) {
-				double status = message.getAltitude();
-				getDrone().GPSSignal(!Double.isNaN(status));
-			}
-		});
+		name = this.config.getGPS();
+		if(name != null){
+			Subscriber<sensor_msgs.NavSatFix> subscriberGPS = connectedNode.newSubscriber(drone.getName()+name, sensor_msgs.NavSatFix._TYPE);
+			subscriberGPS.addMessageListener(new MessageListener<sensor_msgs.NavSatFix>() {
+				@Override
+				public void onNewMessage(sensor_msgs.NavSatFix message) {
+					double alt = message.getAltitude();
+					double l = message.getLatitude();
+					double lat = message.getLongitude();
+					getDrone().GPSReading(alt, l, lat);
+				}
+			});
+		}
 		Subscriber<rosgraph_msgs.Clock> subscriberTime = connectedNode.newSubscriber("/clock", rosgraph_msgs.Clock._TYPE);
 		subscriberTime.addMessageListener(new MessageListener<rosgraph_msgs.Clock>() {
 
@@ -157,7 +161,8 @@ public class SubscriberDrone extends AbstractNodeMain {
 		subscriberBattery.addMessageListener(new MessageListener<sensor_msgs.BatteryState>() {
 			@Override
 			public void onNewMessage(sensor_msgs.BatteryState message) {
-				System.out.println(message.getPercentage());
+				System.out.println("******Battery" + message.getPercentage());
+				getDrone().BatteryPerc(message.getPercentage());
 			}
 		});
 	}

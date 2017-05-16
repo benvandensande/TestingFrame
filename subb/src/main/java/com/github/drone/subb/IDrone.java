@@ -20,11 +20,9 @@ public interface IDrone {
 	public double getYVelocity();
 	public double getZVelocity();
 	public double getBatteryPerc();
+	public void BatteryPerc(double perc);
 	public double getAbsoluteVelocity();
-	public boolean hasGPSSignal();
-	public void GPSSignal(boolean serviceGps);
-	public void SonarReading(float range);
-	public float getSonarReading();
+	
 	List<Point> getTakeOffTrajectory();
 	public void addTrajectory(String name, String call);
 	public Environnement getEnvironnement();
@@ -32,6 +30,14 @@ public interface IDrone {
 	public String getName();
 	public void setName(String name);
 	public double getClosestDistanceToObs();
+	public void GPSReading(double alt, double l, double lat);
+	public void SonarReading(float range);
+	public float getSonarReading();
 	public void BaroReading(Point point);
 	public double getBaroReading();
+	public ComponentStatus getBaroStatus();
+	public ComponentStatus getSonarStatus();
+	public ComponentStatus getBatteryStatus();
+	public ComponentStatus getGPSStatus();
+	
 }
