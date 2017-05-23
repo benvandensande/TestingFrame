@@ -3,17 +3,19 @@ package SimpleTester;
 import com.github.drone.subb.Application;
 import com.github.drone.subb.IDrone;
 
+import Units.Unit;
+
 public class MissionGoalSentence extends Sentence{
 	
 	private double x = 0;
 	private double y = 0;
 	private double z = 0;
 	
-	public MissionGoalSentence(double x, double y, double z, Application app, IDrone drone){
+	public MissionGoalSentence(Unit x, Unit y, Unit z, Application app, IDrone drone){
 		super(app,drone);
-		this.x = x;
-		this.y = y;
-		this.z = z;		
+		this.x = x.getValue();
+		this.y = y.getValue();
+		this.z = z.getValue();		
 	}
 
 	@Override

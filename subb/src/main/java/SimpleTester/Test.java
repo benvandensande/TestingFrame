@@ -109,7 +109,7 @@ public class Test extends Thread {
 	
 	private boolean checkBoundaries(){
 		
-		int simulationTime = this.app.getSimulationTime();
+		double simulationTime = this.app.getSimulationTime();
 		if(simulationTime >= this.first && simulationTime <= this.second){
 			return true;
 		}

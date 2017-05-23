@@ -1,7 +1,11 @@
 package SimpleTester;
 
+
 import com.github.drone.subb.Application;
 import com.github.drone.subb.IDrone;
+
+import Units.Unit;
+import geometry_msgs.Point;
 
 public class RobotPosSentence extends Sentence {
 
@@ -10,22 +14,26 @@ public class RobotPosSentence extends Sentence {
 	private double zPos = 0;
 	private PositionSent sent = null;
 
-	public RobotPosSentence(double i, double j, double d, PositionSent t, Application app, IDrone drone) {
+	public RobotPosSentence(Unit i, Unit j, Unit d, PositionSent t, Application app, IDrone drone) {
 		super(app,drone);
-		this.xPos = i;
-		this.yPos = j;
-		this.zPos = d;
+		this.xPos = i.getValue();
+		this.yPos = j.getValue();
+		this.zPos = d.getValue();
 		this.sent = t;
 	}
 
 	public boolean runGiven() throws InterruptedException {
-		return this.sent.run(this.getDrone(), this.getApp(), this.xPos, this.yPos, this.zPos);
+		Point location = this.getDrone().getLocation();
+		double[] position = new double[] {location.getX(), location.getY(), location.getZ()};
+		return this.sent.run(position, this.getApp(), this.xPos, this.yPos, this.zPos);
 		//		new ObserverPosition(this.getDrone(), this.getApp(), this.sent, this.xPos, this.yPos, this.zPos));
 //		return true;
 	}
 
 	public boolean runWhen() throws InterruptedException {
-		return this.sent.run(this.getDrone(), this.getApp(), this.xPos, this.yPos, this.zPos);
+		Point location = this.getDrone().getLocation();
+		double[] position = new double[] {location.getX(), location.getY(), location.getZ()};
+		return this.sent.run(position, this.getApp(), this.xPos, this.yPos, this.zPos);
 //		Thread t = new Thread(
 //				new ObserverPosition(this.getDrone(), this.getApp(), this.sent, this.xPos, this.yPos, this.zPos));
 //		t.start();
@@ -34,6 +42,8 @@ public class RobotPosSentence extends Sentence {
 	}
 
 	public boolean runThen() {
-		return this.sent.run(this.getDrone(), this.getApp(), this.xPos, this.yPos, this.zPos);
+		Point location = this.getDrone().getLocation();
+		double[] position = new double[] {location.getX(), location.getY(), location.getZ()};
+		return this.sent.run(position, this.getApp(), this.xPos, this.yPos, this.zPos);
 	}
 }

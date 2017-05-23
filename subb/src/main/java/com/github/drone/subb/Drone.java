@@ -250,10 +250,10 @@ public class Drone implements IDrone{
 	@Override
 	public void GPSReading(double alt, double l, double lat) {
 		this.gpsTime = System.currentTimeMillis();
-		this.setGPSReading(new double[] {alt, l, lat});
+		this.setGPSReading(new double[] {lat, l, alt});
 	}
 
-	private double[] getGPSReading() {
+	public double[] getGPSReading() {
 		return GPSReading;
 	}
 

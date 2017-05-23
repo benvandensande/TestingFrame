@@ -31,6 +31,7 @@ public interface IDrone {
 	public void setName(String name);
 	public double getClosestDistanceToObs();
 	public void GPSReading(double alt, double l, double lat);
+	public double[] getGPSReading();
 	public void SonarReading(float range);
 	public float getSonarReading();
 	public void BaroReading(Point point);

@@ -8,7 +8,7 @@ public class Application extends Thread {
 	
 	private boolean isRunning = false;
 	private String path = "";
-	private int simulationTime = 0;
+	private double simulationTime = 0;
 	
 	@Override
 	public void run(){
@@ -32,12 +32,12 @@ public class Application extends Thread {
 		this.isRunning = bool;
 	}
 
-	public int getSimulationTime() {
+	public double getSimulationTime() {
 		return simulationTime;
 	}
 
 	public void setSimulationTime(Time time) {
-		this.simulationTime = time.secs -5;
+		this.simulationTime = time.toSeconds() -5;
 	}
 
 }

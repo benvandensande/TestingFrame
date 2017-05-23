@@ -48,6 +48,7 @@ public class timeIntervalSentence extends Sentence {
 	@Override
 	public boolean runThen() {
 		double simulationTime = this.getApp().getSimulationTime();
+		System.out.println(simulationTime);
 		if(simulationTime >= this.first && simulationTime <= this.second){
 			return true;
 		}

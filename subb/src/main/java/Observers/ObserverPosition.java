@@ -23,12 +23,12 @@ public class ObserverPosition extends Observer{
 
 	@Override
 	public void run() {
-		boolean liesWithin = this.sent.run(drone, this.application, x, y, z);
-		while(!liesWithin && application.isRunning()){
-			liesWithin = this.sent.run(drone, this.application, x, y, z);
-			Thread.yield();
-		}
-		System.out.println("At Position");
+//		boolean liesWithin = this.sent.run(drone, this.application, x, y, z);
+//		while(!liesWithin && application.isRunning()){
+//			liesWithin = this.sent.run(drone, this.application, x, y, z);
+//			Thread.yield();
+//		}
+//		System.out.println("At Position");
 		
 	}
 }
