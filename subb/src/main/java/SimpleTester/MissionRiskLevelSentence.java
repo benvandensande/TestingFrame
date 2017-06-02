@@ -15,35 +15,25 @@ public class MissionRiskLevelSentence extends Sentence {
 
 	@Override
 	public boolean runGiven() throws InterruptedException {
-		MissionRiskLevel level = MissionRiskLevel.SAFE;//drone.getMission().getRiskLevel();
+		MissionRiskLevel level = this.getDrone().getMission().getRiskLevel();
 		if(!level.equals(this.riskLevel) ){
 			return false;
 		}
 		return true;
-//		Thread t = new Thread(
-//				new ObserverMissionRiskLevel(this.getDrone(), this.getApp(), this.riskLevel));
-//		t.start();
-//		t.join();
-//		return true;
 	}
 
 	@Override
 	public boolean runWhen() throws InterruptedException {
-		MissionRiskLevel level = MissionRiskLevel.SAFE;//drone.getMission().getRiskLevel();
+		MissionRiskLevel level = this.getDrone().getMission().getRiskLevel();
 		if(!level.equals(this.riskLevel)){
 			return false;
 		}
 		return true;
-//		Thread t = new Thread(
-//				new ObserverMissionRiskLevel(this.getDrone(), this.getApp(), this.riskLevel));
-//		t.start();
-//		t.join();
-//		return true;
 	}
 
 	@Override
 	public boolean runThen() {
-		MissionRiskLevel level = MissionRiskLevel.SAFE;//drone.getMission().getRiskLevel();
+		MissionRiskLevel level = this.getDrone().getMission().getRiskLevel();
 		if(!level.equals(this.riskLevel)){
 			return false;
 		}

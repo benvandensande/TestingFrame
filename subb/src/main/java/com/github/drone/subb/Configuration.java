@@ -42,9 +42,6 @@ public class Configuration {
 		return this.getTopics().get("simulator");
 	}
 	
-	public String getError() {
-		return this.getTopics().get("error");
-	}
 	public String getBarometer() {
 		return this.getTopics().get("barometer");
 	}

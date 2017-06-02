@@ -15,30 +15,17 @@ public class MissionStatusSentence extends Sentence {
 
 	@Override
 	public boolean runGiven() throws InterruptedException {
-		//return this.drone.getMission().getStatus().equals(this.status);
-				return true;
-//		Thread t = new Thread(
-//				new ObserverMissionStatus(this.getDrone(), this.getApp(), this.status));
-//		t.start();
-//		t.join();
-//		return true;
+		return this.getDrone().getMission().getStatus().equals(this.status);
 	}
 
 	@Override
 	public boolean runWhen() throws InterruptedException {
-		//return this.drone.getMission().getStatus().equals(this.status);
-				return true;
-//		Thread t = new Thread(
-//				new ObserverMissionStatus(this.getDrone(), this.getApp(), this.status));
-//		t.start();
-//		t.join();
-//		return true;
+		return this.getDrone().getMission().getStatus().equals(this.status);
 	}
 
 	@Override
 	public boolean runThen() {
-		//return this.drone.getMission().getStatus().equals(this.status);
-		return true;
+		return this.getDrone().getMission().getStatus().equals(this.status);
 	}
 
 }

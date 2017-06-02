@@ -22,6 +22,8 @@ public interface IDrone {
 	public double getBatteryPerc();
 	public void BatteryPerc(double perc);
 	public double getAbsoluteVelocity();
+	public Mission getMission();
+	public void setMission(Mission mis);
 	
 	List<Point> getTakeOffTrajectory();
 	public void addTrajectory(String name, String call);

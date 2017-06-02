@@ -31,6 +31,7 @@ public class Drone implements IDrone{
 	double minSpeed = 0.2;
 	double componentTimeOut = 5000;
 	private String name = "";
+	private Mission mission = new Mission();
 	
 	public Drone(String name){
 		this.name = name;
@@ -259,6 +260,16 @@ public class Drone implements IDrone{
 
 	private void setGPSReading(double[] gPSReading) {
 		GPSReading = gPSReading;
+	}
+
+	@Override
+	public Mission getMission() {
+		return this.mission;
+	}
+
+	@Override
+	public void setMission(Mission mis) {
+		this.mission = mis;
 	}
 
 }

@@ -20,41 +20,31 @@ public class MissionGoalSentence extends Sentence{
 
 	@Override
 	public boolean runGiven() throws InterruptedException {
-		double xGoal = 0;//this.drone.getMission().getX();
-		double yGoal = 0;//this.drone.getMission().getY();
-		double zGoal = 0;//this.drone.getMission().getZ();
+		double xGoal = this.getDrone().getMission().getGoal().getX();
+		double yGoal = this.getDrone().getMission().getGoal().getY();
+		double zGoal = this.getDrone().getMission().getGoal().getZ();
 		if((this.x != xGoal || this.y != yGoal || this.z != zGoal)){
 			return false;
 		}
 		return true;
-//		Thread t = new Thread(
-//				new ObserverMissionGoal(this.getDrone(), this.getApp(), this.x, this.y, this.z));
-//		t.start();
-//		t.join();
-//		return true;
 	}
 
 	@Override
 	public boolean runWhen() throws InterruptedException {
-		double xGoal = 0;//this.drone.getMission().getX();
-		double yGoal = 0;//this.drone.getMission().getY();
-		double zGoal = 0;//this.drone.getMission().getZ();
+		double xGoal = this.getDrone().getMission().getGoal().getX();
+		double yGoal = this.getDrone().getMission().getGoal().getY();
+		double zGoal = this.getDrone().getMission().getGoal().getZ();
 		if((this.x != xGoal || this.y != yGoal || this.z != zGoal)){
 			return false;
 		}
 		return true;
-//		Thread t = new Thread(
-//				new ObserverMissionGoal(this.getDrone(), this.getApp(), this.x, this.y, this.z));
-//		t.start();
-//		t.join();
-//		return true;
 	}
 
 	@Override
 	public boolean runThen() {
-		double xGoal = 0;//this.drone.getMission().getX();
-		double yGoal = 0;//this.drone.getMission().getY();
-		double zGoal = 0;//this.drone.getMission().getZ();
+		double xGoal = this.getDrone().getMission().getGoal().getX();
+		double yGoal = this.getDrone().getMission().getGoal().getY();
+		double zGoal = this.getDrone().getMission().getGoal().getZ();
 		if((this.x != xGoal || this.y != yGoal || this.z != zGoal)){
 			return false;
 		}
