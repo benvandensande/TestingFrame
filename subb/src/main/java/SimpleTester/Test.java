@@ -6,6 +6,7 @@ import java.util.List;
 import com.github.drone.subb.Application;
 
 public class Test extends Thread {
+	
 	private String name = "";
 	private String description = "";
 	private Application app = null;
@@ -15,6 +16,9 @@ public class Test extends Thread {
 	private List<Statement> thenStatements = new ArrayList<Statement>();
 	private double first = Double.NaN;
 	private double second = Double.NaN;
+	private long timeOut = 25000;
+	private long beginTime = 0;
+	private boolean printed = false;;
 
 	public Test(String name, String description, Application app) {
 		this.name = name;
@@ -38,31 +42,29 @@ public class Test extends Thread {
 	}
 
 	public void run() {
-		boolean result = checkStatement(this.givenStatements);
+		this.beginTime = System.currentTimeMillis();
+		boolean result = checkStatements(this.givenStatements);
 		if(result) {
 			System.out.println("in when");
-			result = checkStatement(this.whenStatements);
+			result = checkStatements(this.whenStatements);
 			if(result) {
 				if(Double.isNaN(this.first)){
 					System.out.println("in then");
 					result = checkThenStatements(result);
 				}else{
 					System.out.println("in then long");
-					while(result && checkBoundaries() && this.app.isRunning()){
-						
+					while(result && checkBoundaries() && this.app.isRunning() && !checkTimeout()){
+						try {
+							Test.sleep(25);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 						result = checkThenStatements(result);
 					}
 				}
 			}
 		}
-		System.out.println("Ran test: " + this.name + "| Successfull: " + result);
-//		boolean result = true;
-//		for (Statement stat : this.statements) {
-//			if (stat.run() == false) {
-//				result = false;
-//			}
-//		}
-//		System.out.println("Ran test: " + this.name + "| Successfull: " + result);
+		if(!this.printed) System.out.println("Ran test: " + this.name + "| Successfull: " + result);
 	}
 
 	
@@ -79,12 +81,15 @@ public class Test extends Thread {
 		this.thenStatements.add(thenStatement);
 	}	
 	
-	private boolean checkStatement(List<Statement> statements) {
-		if(statements.isEmpty()){
+	private boolean checkStatements(List<Statement> statements) {
+		if(checkTimeout()){
+			return false;
+		}
+		else if(statements.isEmpty()){
 			return true;
 		}else{
 			boolean allTrue = false;
-			while(!allTrue && app.isRunning()){
+			while(!allTrue && app.isRunning() && !checkTimeout()){
 				allTrue = true;
 				for (Statement stat : statements) {
 					if (stat.run() == false) {
@@ -98,18 +103,33 @@ public class Test extends Thread {
 	}
 	
 	private boolean checkThenStatements(boolean result) {
-		for (Statement stat : this.thenStatements) {
-			if (stat.run() == false) {
-				result = false;
-			}
+		if(checkTimeout()){
+			return false;
 		}
-		return result;
+		else{
+			for (Statement stat : this.thenStatements) {
+				if (stat.run() == false) {
+					result = false;
+				}
+			}
+			return result;
+		}
 	}
 	
 	private boolean checkBoundaries(){
 		
-		double simulationTime = this.app.getSimulationTime().toSeconds();
+		double simulationTime = this.app.getSimulationTime();
 		if(simulationTime >= this.first && simulationTime <= this.second){
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean checkTimeout(){
+		if((System.currentTimeMillis() - this.beginTime) > this.timeOut){
+			this.app.setRunning(false);
+			System.out.println("Ran test: " + this.name + "| Test Timeout");
+			this.printed = true;
 			return true;
 		}
 		return false;
@@ -122,6 +142,5 @@ public class Test extends Thread {
 	public void setSecond(double s) {
 		this.second = s;
 	}
-	
-	
+		
 }

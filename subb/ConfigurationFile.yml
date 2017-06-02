@@ -4,8 +4,10 @@ topics:
   position: /ground_truth_to_tf/pose
   applicationStart: start
   applicationStop: stop
-  sonar: /sonar
+  sonar: /sonar_height
+  barometer: /pressure_height
   simulator: /gazebo/model_states
+  gps: /fix
       
 simulatorbashpath: /home/ben/rosjava/src/drone/subb/src/main/java/bashFiles/startGazebo.sh
 applicationbashpath: /home/ben/rosjava/src/drone/subb/src/main/java/bashFiles/startApp.sh

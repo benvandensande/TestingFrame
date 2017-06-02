@@ -3,7 +3,6 @@ package SimpleTester;
 import com.github.drone.subb.Application;
 import com.github.drone.subb.IDrone;
 
-import Observers.ObserverTime;
 import Units.Unit;
 
 public class timeIntervalSentence extends Sentence {
@@ -22,7 +21,7 @@ public class timeIntervalSentence extends Sentence {
 	@Override
 	public boolean runGiven() throws InterruptedException {
 		
-		if(this.getApp().getSimulationTime().toSeconds() >= this.first && this.getApp().getSimulationTime().toSeconds() <= this.second){
+		if(this.getApp().getSimulationTime() >= this.first && this.getApp().getSimulationTime() <= this.second){
 			return true;
 		}
 		return false;
@@ -34,7 +33,7 @@ public class timeIntervalSentence extends Sentence {
 
 	@Override
 	public boolean runWhen() throws InterruptedException {
-		if(this.getApp().getSimulationTime().toSeconds() >= this.first && this.getApp().getSimulationTime().toSeconds() <= this.second){
+		if(this.getApp().getSimulationTime() >= this.first && this.getApp().getSimulationTime() <= this.second){
 			this.test.setFirst(this.first);
 			this.test.setSecond(this.second);
 			return true;
@@ -48,7 +47,8 @@ public class timeIntervalSentence extends Sentence {
 
 	@Override
 	public boolean runThen() {
-		double simulationTime = this.getApp().getSimulationTime().toSeconds();
+		double simulationTime = this.getApp().getSimulationTime();
+		System.out.println(simulationTime);
 		if(simulationTime >= this.first && simulationTime <= this.second){
 			return true;
 		}

@@ -14,18 +14,10 @@ public class WindSpdSentence extends Sentence {
 
 	public boolean runGiven() throws InterruptedException {
 		return sent.run(getDrone().getEnvironnement().getAbsoluteWindVelocity());
-//		Thread t = new Thread(new ObserverWind(getDrone(), getApp(), sent));
-//		t.start();
-//		t.join();
-//		return true;
 	}
 
 	public boolean runWhen() throws InterruptedException {
 		return sent.run(getDrone().getEnvironnement().getAbsoluteWindVelocity());
-//		Thread t = new Thread(new ObserverWind(getDrone(), getApp(), sent));
-//		t.start();
-//		t.join();
-//		return true;
 	}
 
 	public boolean runThen() {

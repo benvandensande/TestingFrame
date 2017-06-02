@@ -3,7 +3,7 @@ package SimpleTester;
 import com.github.drone.subb.Application;
 import com.github.drone.subb.IDrone;
 
-import Observers.ObserverDistance;
+import Units.Unit;
 import geometry_msgs.Point;
 
 public class DistanceToLocSentence extends Sentence {
@@ -12,12 +12,12 @@ public class DistanceToLocSentence extends Sentence {
 	private double z = 0.0;
 	private ComparativeSentence sent = null;
 
-	public DistanceToLocSentence(double xPos, double yPos, double zPos, ComparativeSentence sent, Application app,
+	public DistanceToLocSentence(Unit xPos,  Unit yPos, Unit zPos, ComparativeSentence sent, Application app,
 			IDrone drone) {
 		super(app,drone);
-		this.x = xPos;
-		this.y = yPos;
-		this.z = zPos;
+		this.x = xPos.getValue();
+		this.y = yPos.getValue();
+		this.z = zPos.getValue();
 		this.sent = sent;
 	}
 

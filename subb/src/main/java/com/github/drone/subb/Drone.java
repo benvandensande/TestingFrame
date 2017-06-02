@@ -20,13 +20,21 @@ public class Drone implements IDrone{
 	private List<Point> takeOffTrajectory = null;
 	private Vector3 velocity = null;
 	private double batteryPercentage = 100;
-	private boolean gpsSignal = false;
+	private double batteryTime =0;
+	private double gpsTime = 0;
 	private float sonarReading = Float.MAX_VALUE;
+	private double sonarTime = 0;
+	private Point baroReading = null;
+	private double baroTime = 0;
+	private double[] GPSReading = null;
 	private Environnement environnement = null;
 	double minSpeed = 0.2;
-	private String name = "quadrotor";
+	double componentTimeOut = 5000;
+	private String name = "";
+	private Mission mission = new Mission();
 	
-	public Drone(){
+	public Drone(String name){
+		this.name = name;
 		this.state = DroneState.LANDED;
 		this.trajectory = new ArrayList<Point>();
 		this.takeOffTrajectory = new ArrayList<Point>();
@@ -76,6 +84,7 @@ public class Drone implements IDrone{
 
 	@Override
 	public void setPosition(Point pos) {
+		this.gpsTime = System.currentTimeMillis();
 		this.location = pos;
 		this.addPointToTrajectory(pos);
 	}
@@ -157,29 +166,26 @@ public class Drone implements IDrone{
 	public double getBatteryPerc() {
 		return this.batteryPercentage;
 	}
+	
+	@Override
+	public void BatteryPerc(double perc) {
+		this.batteryTime = System.currentTimeMillis();
+		this.batteryPercentage = perc;
+	}
 
 	@Override
 	public double getAbsoluteVelocity() {
 		return Math.sqrt(Math.pow(getXVelocity(), 2) + Math.pow(getYVelocity(), 2) + Math.pow(getZVelocity(), 2));
 	}
-	
-	@Override
-	public boolean hasGPSSignal(){
-		return this.gpsSignal;
-	}
-
-	@Override
-	public void GPSSignal(boolean serviceGps) {
-		this.gpsSignal = serviceGps;
-	}
 
 	@Override
 	public void SonarReading(float range) {
+		this.sonarTime = System.currentTimeMillis();
 		this.sonarReading = range;
 	}
 
 	@Override
-	public float getSonar() {
+	public float getSonarReading() {
 		return this.sonarReading;
 	}
 	
@@ -198,8 +204,72 @@ public class Drone implements IDrone{
 
 	@Override
 	public double getClosestDistanceToObs() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.getEnvironnement().getClosestDistanceToObject(this.location);
+	}
+
+	@Override
+	public void BaroReading(Point point) {
+		this.baroTime = System.currentTimeMillis();
+		this.baroReading = point;
+		
+	}
+	
+	@Override
+	public double getBaroReading() {
+		return this.baroReading.getZ();
+		
+	}
+
+	@Override
+	public ComponentStatus getBaroStatus() {
+		return checkCompTimeout(this.baroTime);
+	}
+
+	@Override
+	public ComponentStatus getSonarStatus() {
+		return checkCompTimeout(this.sonarTime);
+	}
+
+	@Override
+	public ComponentStatus getBatteryStatus() {
+		return checkCompTimeout(this.batteryTime);
+	}
+
+	@Override
+	public ComponentStatus getGPSStatus() {
+		return checkCompTimeout(this.gpsTime);
+	}
+	
+	private ComponentStatus checkCompTimeout(double time) {
+		if (System.currentTimeMillis() <= (time + componentTimeOut)){
+			return ComponentStatus.ACTIVE;
+		}else{
+			return ComponentStatus.FAILING;
+		}
+	}
+
+	@Override
+	public void GPSReading(double alt, double l, double lat) {
+		this.gpsTime = System.currentTimeMillis();
+		this.setGPSReading(new double[] {lat, l, alt});
+	}
+
+	public double[] getGPSReading() {
+		return GPSReading;
+	}
+
+	private void setGPSReading(double[] gPSReading) {
+		GPSReading = gPSReading;
+	}
+
+	@Override
+	public Mission getMission() {
+		return this.mission;
+	}
+
+	@Override
+	public void setMission(Mission mis) {
+		this.mission = mis;
 	}
 
 }

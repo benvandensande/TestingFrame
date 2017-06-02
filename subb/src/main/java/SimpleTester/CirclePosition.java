@@ -1,10 +1,8 @@
 package SimpleTester;
 
 import com.github.drone.subb.Application;
-import com.github.drone.subb.IDrone;
 
 import Units.Unit;
-import geometry_msgs.Point;
 
 public class CirclePosition extends PositionSent {
 
@@ -14,9 +12,8 @@ public class CirclePosition extends PositionSent {
 		this.tolerance = t;
 	}
 
-	public boolean run(IDrone drone, Application app, double x, double y, double z) {
-		Point location = drone.getLocation();
-		return (Math.pow(location.getX() - x, 2) + Math.pow(location.getY() - y, 2)) 
+	public boolean run(double[] location, Application app, double x, double y, double z) {
+		return (Math.pow(location[0]- x, 2) + Math.pow(location[1] - y, 2)) 
 				< Math.pow(this.tolerance.getValue(), 2);
 	}
 }

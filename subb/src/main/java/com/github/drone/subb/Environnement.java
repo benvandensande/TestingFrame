@@ -4,22 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import geometry_msgs.Point;
+import geometry_msgs.Pose;
 import geometry_msgs.Vector3;
 
 public class Environnement {
 	
 	private Vector3 windSpeed = null;
+	private List<String> objectNames = null;
 	private List<Object> objectsInEnvironnemnt = null;
 	private List<IDrone> drones = null;
 	
 	public Environnement(){
 		this.objectsInEnvironnemnt = new ArrayList<Object>();
+		this.objectNames = new ArrayList<String>();
 		this.drones = new ArrayList<IDrone>();
 	}
 
 	public double getAbsoluteWindVelocity() {
-		return 0;
-		//return Math.sqrt(Math.pow(this.windSpeed.getX(), 2) + Math.pow(this.windSpeed.getY(), 2) + Math.pow(this.windSpeed.getZ(), 2));
+		if(windSpeed == null){
+			return 0;
+		}
+		else{
+			return Math.sqrt(Math.pow(this.windSpeed.getX(), 2) + Math.pow(this.windSpeed.getY(), 2) + Math.pow(this.windSpeed.getZ(), 2));
+		}
 	}
 
 	public Vector3 getWindSpeed() {
@@ -34,8 +41,23 @@ public class Environnement {
 		return objectsInEnvironnemnt;
 	}
 
-	public void addObjectToEnvironnemnt(Object p) {
-		this.objectsInEnvironnemnt.add(p);
+	public void addObjectsToEnvironnemnt(List<Pose> poseLst, List<String> nameLst) {
+		for(String name:nameLst.subList(1, nameLst.size())){
+			if(!objectNames.contains(name) ){
+				if(name.contains("quadrotor")){
+					System.out.println("drone added");
+					this.objectNames.add(name);
+					this.addDrone(new Drone(name));
+				}else{
+					// TODO add size of objects
+					int index = nameLst.indexOf(name);
+					this.objectNames.add(name);
+					this.objectsInEnvironnemnt.add(new Object(null,poseLst.get(index).getPosition()));
+					System.out.println("object added: " + name );
+				}
+				
+			}
+		}
 	}
 	
 	public void removeObjectOffEnvironnemnt(Object p) {

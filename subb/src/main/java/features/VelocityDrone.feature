@@ -1,8 +1,3 @@
-
-//Feature: Title of your feature
-//	I want to use this template for my feature file
-//	
-//Scenario: Title of your scenario
-//Given Start app
-//When velocity "greater than" 3 m/s
-//Then Error "Velocity too high"
+Test: Speed
+Given: Robot speed is equal to m/h( 0.0 , 0.0 , 0.0 )
+Then: Barometer status is ACTIVE

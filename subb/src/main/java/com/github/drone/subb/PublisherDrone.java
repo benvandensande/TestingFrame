@@ -27,13 +27,14 @@ public class PublisherDrone extends AbstractNodeMain {
 	@Override
 	public void onStart(final ConnectedNode connectedNode) {
 		
-		ServiceClient<EmptyRequest, EmptyResponse> client;
+		//TODO make apart class for starting app
+		ServiceClient<rosjava_test_msgs.AddTwoIntsRequest, rosjava_test_msgs.AddTwoIntsResponse> client;
 		try {
-			client = connectedNode.newServiceClient("start", "std_srvs/Empty");
-			std_srvs.EmptyRequest request = client.newMessage();
+			client = connectedNode.newServiceClient("start", rosjava_test_msgs.AddTwoInts._TYPE);
+			rosjava_test_msgs.AddTwoIntsRequest request = client.newMessage();
 			System.out.println(client);
 
-	        client.call(request, new ServiceResponseListener<std_srvs.EmptyResponse>() {
+	        client.call(request, new ServiceResponseListener<rosjava_test_msgs.AddTwoIntsResponse>() {
 				@Override
 				public void onFailure(RemoteException arg0) {
 					System.out.println("fail");
@@ -41,13 +42,15 @@ public class PublisherDrone extends AbstractNodeMain {
 				}
 
 				@Override
-				public void onSuccess(EmptyResponse arg0) {
+				public void onSuccess(rosjava_test_msgs.AddTwoIntsResponse arg0) {
+					while(connectedNode.getCurrentTime().secs < arg0.getSum()){}
+					System.out.println("***app started");
 					final Publisher< geometry_msgs.Twist> publisher =
 					connectedNode.newPublisher("quadrotor/cmd_vel",  geometry_msgs.Twist._TYPE);
 					int i = 0;
 					while(i<1000){
 						publish(publisher, 0.3);
-						System.out.println("published");
+						//System.out.println("published");
 						publish(publisher, 0.3);
 						i += 1;
 					}
@@ -60,7 +63,7 @@ public class PublisherDrone extends AbstractNodeMain {
 					i = 0;
 					while(i<200){
 						publish(publisher, 0);
-						System.out.println("stopped");
+						//System.out.println("stopped");
 						publish(publisher, 0);
 						i += 1;
 					}
@@ -71,8 +74,7 @@ public class PublisherDrone extends AbstractNodeMain {
 						stopClient = connectedNode.newServiceClient("stop", "std_srvs/Empty");
 						std_srvs.EmptyRequest request = stopClient.newMessage();
 						System.out.println(stopClient);
-						Time time = connectedNode.getCurrentTime();
-						while(time.secs < 15){}
+						while(connectedNode.getCurrentTime().secs < 20){}
 						stopClient.call(request, new ServiceResponseListener<std_srvs.EmptyResponse>() {
 							@Override
 							public void onFailure(RemoteException arg0) {
