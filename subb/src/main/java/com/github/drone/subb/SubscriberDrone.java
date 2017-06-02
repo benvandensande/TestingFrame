@@ -50,12 +50,8 @@ public class SubscriberDrone extends AbstractNodeMain {
 		conNode = connectedNode;
 		try {
 			setupConfig();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		setupApplicationCommunication(connectedNode);
-		setupSubscribers(connectedNode);
-		try {
+			setupApplicationCommunication(connectedNode);
+			setupSubscribers(connectedNode);
 			initialize();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -175,7 +171,6 @@ public class SubscriberDrone extends AbstractNodeMain {
 
 				@Override
 				public void build(AddTwoIntsRequest arg0, AddTwoIntsResponse arg1) throws ServiceException {
-					
 					app.setRunning(true);
 					while(gazebo == null || !gazebo.isRunning()){Thread.yield();}
 					ConnectedNode con = SubscriberDrone.getConNode();
