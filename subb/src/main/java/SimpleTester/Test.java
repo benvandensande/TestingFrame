@@ -68,7 +68,6 @@ public class Test extends Thread {
 	}
 
 	
-
 	public void addGiven(GivenStatement givenStatement) {
 		this.givenStatements.add(givenStatement);
 	}
@@ -117,7 +116,6 @@ public class Test extends Thread {
 	}
 	
 	private boolean checkBoundaries(){
-		
 		double simulationTime = this.app.getSimulationTime();
 		if(simulationTime >= this.first && simulationTime <= this.second){
 			return true;
@@ -127,7 +125,6 @@ public class Test extends Thread {
 	
 	private boolean checkTimeout(){
 		if((System.currentTimeMillis() - this.beginTime) > this.timeOut){
-			this.app.setRunning(false);
 			System.out.println("Ran test: " + this.name + "| Test Timeout");
 			this.printed = true;
 			return true;

@@ -174,7 +174,7 @@ public class SubscriberDrone extends AbstractNodeMain {
 					app.setRunning(true);
 					while(gazebo == null || !gazebo.isRunning()){Thread.yield();}
 					ConnectedNode con = SubscriberDrone.getConNode();
-					int startTime = con.getCurrentTime().secs + 5;
+					int startTime = con.getCurrentTime().secs + 2;
 					arg1.setSum(startTime);
 					startTester(con, startTime);
 					
@@ -233,7 +233,8 @@ public class SubscriberDrone extends AbstractNodeMain {
 	}
 
 	public void shutdown(){
-		while(app.isRunning()){Thread.yield();}
+		long beginTime = System.currentTimeMillis();
+		while(app.isRunning() && (System.currentTimeMillis() - beginTime) < 5000){Thread.yield();}
 		Runtime.getRuntime().exit(0);
 	}
 	
