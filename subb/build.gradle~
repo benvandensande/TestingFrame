@@ -15,23 +15,11 @@
  */
 /* This plugin is necessary for creating installApp tasks (i.e. executables) */
 plugins {
-    id 'org.xtext.builder' version '1.0.0'
+    id 'org.xtext.builder' version '1.0.17'
     id 'application'
     id 'java'
   }
 mainClassName = 'org.ros.RosRun'
-
-
-
-/* 
- Dependencies can be on external maven artifacts (such as rosjava_core
- here) or on sibling subprojects. Fpr external maven artifact dependencies
- it's convenient to use an open ranged dependency, but restrict it to
- cover the patch version only to avoid breakages due to api changes
- which usually occur on minor and major version numbers.
-*/
-
-
 
 sourceSets {
 main{
@@ -51,10 +39,7 @@ jcenter()
 }
 
 dependencies {
-  /* An external maven artifact dependency */
   compile 'org.ros.rosjava_core:rosjava:[0.2,0.3)'
-  /* Example of a local subproject dependency */ 
-  /* compile project(':sibling_gradle_project') */
   compile 'org.ros.rosjava_bootstrap:message_generation:[0.2,0.3)'
   compile 'org.ros.rosjava_messages:geometry_msgs:1.11.9'
   compile 'org.ros.rosjava_messages:std_msgs:0.5.10'
@@ -63,22 +48,30 @@ dependencies {
   compile 'org.ros.rosjava_messages:hector_uav_msgs:0.3.3'
   compile 'org.yaml:snakeyaml:1.16'
   compile fileTree(dir: 'jars', include: '*.jar')
-  compile project(":org.xtext.example.mylanguage.parent")
-  xtextLanguages 'com.github.rosjava.drone:org.xtext.example.mylanguage.parent:0.1.0'
+  xtextLanguages 'org.xtext.example.mylanguage:org.xtext.example.mylanguage:1.0.0-SNAPSHOT'
   xtextLanguages 'org.eclipse.jdt:org.eclipse.jdt.core:3.12.2'
 }
 
+/*
 xtext {
 	version = '2.10.0'
     languages {
       mylanguage {
-        fileExtension = 'feature' // required, unless fileExtension == language name (here "herolang")
+        fileExtension = 'feature'
         setup = 'org.xtext.example.mydsl.MyLanguageStandaloneSetup'
        	generator.outlet.producesJava = true
       }
     }
+    sourceSets {
+      main {
+        //you can add additional folders that are not Java source folders here
+        output {
+          dir(xtext.languages.mylanguage.generator.outlet, 'src-gen/features')
+        }
+      }
+    }
     
   }
-
+*/
 
 

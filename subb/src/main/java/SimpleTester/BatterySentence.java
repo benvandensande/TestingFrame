@@ -34,6 +34,7 @@ public class BatterySentence extends ComponentSentence {
 	}
 
 	public boolean runThen() {
+		System.out.println(this.getDrone().getBatteryPerc());
 		return this.sent.run(this.getDrone().getBatteryPerc());
 	}
 

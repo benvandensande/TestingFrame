@@ -44,6 +44,7 @@ public class Test extends Thread {
 	public void run() {
 		this.beginTime = System.currentTimeMillis();
 		boolean result = checkStatements(this.givenStatements);
+		System.out.println(result);
 		if(result) {
 			System.out.println("in when");
 			result = checkStatements(this.whenStatements);
@@ -51,15 +52,36 @@ public class Test extends Thread {
 				if(Double.isNaN(this.first)){
 					System.out.println("in then");
 					result = checkThenStatements(result);
-				}else{
-					System.out.println("in then long");
-					while(result && checkBoundaries() && this.app.isRunning() && !checkTimeout()){
+				}else if (this.first == Double.MAX_VALUE){
+					System.out.println("in then always time");
+					while(result && this.app.isRunning() && !checkTimeout()){
+						result = checkThenStatements(result);
 						try {
 							Test.sleep(25);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
+					}
+				}else if (this.first == Double.MIN_VALUE){
+					System.out.println("in then never time");
+					while(result && this.app.isRunning() && !checkTimeout()){
+						result = !checkThenStatements(result);
+						try {
+							Test.sleep(25);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+				}else{
+					System.out.println("in then long");
+					while(result && checkBoundaries() && this.app.isRunning() && !checkTimeout()){
 						result = checkThenStatements(result);
+						try {
+							Test.sleep(25);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						
 					}
 				}
 			}
@@ -102,7 +124,7 @@ public class Test extends Thread {
 	}
 	
 	private boolean checkThenStatements(boolean result) {
-		if(checkTimeout()){
+		if(!app.isRunning() || checkTimeout()){
 			return false;
 		}
 		else{
