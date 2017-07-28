@@ -36,6 +36,7 @@ public class timeIntervalSentence extends Sentence {
 		if(this.getApp().getSimulationTime() >= this.first && this.getApp().getSimulationTime() <= this.second){
 			this.test.setFirst(this.first);
 			this.test.setSecond(this.second);
+			System.out.println("true");
 			return true;
 		}
 		return false;
@@ -48,7 +49,6 @@ public class timeIntervalSentence extends Sentence {
 	@Override
 	public boolean runThen() {
 		double simulationTime = this.getApp().getSimulationTime();
-		System.out.println(simulationTime);
 		if(simulationTime >= this.first && simulationTime <= this.second){
 			return true;
 		}

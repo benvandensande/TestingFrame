@@ -18,14 +18,16 @@ public class TesterThread extends Thread{
 	private SubscriberDrone sub;
 	private ConnectedNode con;
 	private int startTime = 0;
+	private long timeout = 0;
 
-	public TesterThread (IDrone drone, Application app, SubscriberDrone subb, ConnectedNode con, int startTime){
+	public TesterThread (IDrone drone, Application app, SubscriberDrone subb, ConnectedNode con, int startTime, long timeout){
 		this.drone = drone;
 		this.app = app;
 		this.sub = subb;
 		this.con = con;
 		this.startTime = startTime;
 		this.features = new ArrayList<String>();
+		this.timeout = timeout;
 		try {
 			new textParser().parseTestFiles(this);
 		} catch (IOException e) {
@@ -40,7 +42,7 @@ public class TesterThread extends Thread{
 		ArrayList<Thread> threads = new ArrayList<Thread>();
 		
 		for(String feature:features){
-			Thread t = new Thread(new FeatureTester(feature, this.drone, this.app));
+			Thread t = new Thread(new FeatureTester(feature, this.drone, this.app,this.timeout));
 			t.start();
 			threads.add(t);
 		}

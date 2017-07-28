@@ -16,14 +16,15 @@ public class Test extends Thread {
 	private List<Statement> thenStatements = new ArrayList<Statement>();
 	private double first = Double.NaN;
 	private double second = Double.NaN;
-	private long timeOut = 25000;
+	private long timeOut =0;
 	private long beginTime = 0;
 	private boolean printed = false;;
 
-	public Test(String name, String description, Application app) {
+	public Test(String name, String description, Application app, long t) {
 		this.name = name;
 		this.description = description;
 		this.app = app;
+		this.timeOut = t *1000;
 	}
 	
 	public void commitStatements(List<Statement> statements){
@@ -47,6 +48,7 @@ public class Test extends Thread {
 		System.out.println(result);
 		if(result) {
 			System.out.println("in when");
+			System.out.println(this.timeOut);
 			result = checkStatements(this.whenStatements);
 			if(result) {
 				if(Double.isNaN(this.first)){

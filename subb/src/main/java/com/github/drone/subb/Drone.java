@@ -62,10 +62,10 @@ public class Drone implements IDrone{
 			}
 			this.state = DroneState.TAKEOFF;
 		}
-		else if(xVelocity > minSpeed || yVelocity > minSpeed){
+		else if(xVelocity > minSpeed || yVelocity > minSpeed || yVelocity > minSpeed){
 			this.state = DroneState.FLYING;
 		}
-		else if(zVelocity < -minSpeed && (Math.abs(xVelocity) < minSpeed) && (Math.abs(yVelocity) < minSpeed)){
+		else if(zVelocity > minSpeed && (Math.abs(xVelocity) < minSpeed) && (Math.abs(yVelocity) < minSpeed) && (!this.getState().equals(DroneState.LANDED) )){
 			this.state = DroneState.LANDING;
 		}
 		else if(Math.abs(zVelocity) < minSpeed && (Math.abs(xVelocity) < minSpeed) && (Math.abs(yVelocity) < minSpeed) && (!this.getState().equals(DroneState.LANDED))){

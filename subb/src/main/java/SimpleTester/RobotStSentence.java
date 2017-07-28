@@ -31,7 +31,7 @@ public class RobotStSentence extends Sentence {
 	}
 
 	public boolean runThen() {
-		System.out.println(getDrone().getState());
+		//System.out.println(getDrone().getState());
 		return getDrone().getState().equals(DroneState.valueOf(this.state));
 //		if (getApp().isRunning()) {
 //			System.out.println(getDrone().getState());

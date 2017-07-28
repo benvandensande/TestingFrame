@@ -8,7 +8,7 @@ public class CirclePosition extends PositionSent {
 
 	private Unit tolerance = null;
 
-	public CirclePosition(Unit t, String unit) {
+	public CirclePosition(Unit t) {
 		this.tolerance = t;
 	}
 

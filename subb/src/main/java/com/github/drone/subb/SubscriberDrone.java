@@ -219,7 +219,7 @@ public class SubscriberDrone extends AbstractNodeMain {
 	}
 
 	private void startTester(ConnectedNode con, int startTime){
-		TesterThread test = new TesterThread(SubscriberDrone.getDrone(), app, this, con, startTime);
+		TesterThread test = new TesterThread(SubscriberDrone.getDrone(), app, this, con, startTime,this.config.getTimeout());
 		Thread t = new Thread(test);
 		t.start();
 	}

@@ -18,7 +18,7 @@ import std_srvs.EmptyResponse;
 /**
  * A simple {@link Publisher} {@link NodeMain}.
  */
-public class PublisherDrone extends AbstractNodeMain {
+public class PublisherDrone4 extends AbstractNodeMain {
 
 	@Override
 	public GraphName getDefaultNodeName() {
@@ -48,11 +48,13 @@ public class PublisherDrone extends AbstractNodeMain {
 					System.out.println("***app started");
 					final Publisher< geometry_msgs.PoseStamped> publisher =
 							connectedNode.newPublisher("quadrotor/command/pose",  geometry_msgs.PoseStamped._TYPE);
+					final Publisher< sensor_msgs.BatteryState> publisherBat =
+							connectedNode.newPublisher("quadrotor/battery",  sensor_msgs.BatteryState._TYPE);
 					int i = 0;
 					while(i<1000){
-						publish(publisher, 2);
+						publish(publisher, 2 , 0, 0);
 						System.out.println("published");
-						publish(publisher, 2);
+						publish(publisher, 2, 0, 0);
 						i += 1;
 					}
 					try {
@@ -61,13 +63,21 @@ public class PublisherDrone extends AbstractNodeMain {
 						e.printStackTrace();
 					}
 					i = 0;
-					publish(publisher, 0.3);
-//					while(i<200){
-//						publish(publisher, 0);
-//						//System.out.println("stopped");
-//						publish(publisher, 0);
-//						i += 1;
-//					}
+					int y = 99;
+					publishBattery(publisherBat, y);
+					while(i<50){
+						y -= 1;
+						if (y < 50) publish(publisher,0.5,0,0);
+						try {
+							Thread.sleep(500);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						publishBattery(publisherBat, y);
+						//System.out.println("stopped");
+						publishBattery(publisherBat, y);
+						i += 1;
+					}
 					System.out.println("done");
 //					final Publisher< geometry_msgs.Twist> publisher =
 //					connectedNode.newPublisher("quadrotor/cmd_vel",  geometry_msgs.Twist._TYPE);
@@ -98,7 +108,7 @@ public class PublisherDrone extends AbstractNodeMain {
 						stopClient = connectedNode.newServiceClient("stop", "std_srvs/Empty");
 						std_srvs.EmptyRequest request = stopClient.newMessage();
 						System.out.println(stopClient);
-						while(connectedNode.getCurrentTime().secs < 20){}
+						while(connectedNode.getCurrentTime().secs < 30){}
 						stopClient.call(request, new ServiceResponseListener<std_srvs.EmptyResponse>() {
 							@Override
 							public void onFailure(RemoteException arg0) {
@@ -129,13 +139,29 @@ public class PublisherDrone extends AbstractNodeMain {
 		
 	}
 
-	private void publish(final Publisher<geometry_msgs.PoseStamped> publisher, double d) {
+	private void publish(final Publisher<geometry_msgs.PoseStamped> publisher, double z, double x, double y) {
 		geometry_msgs.PoseStamped str = publisher.newMessage();
 		geometry_msgs.Pose pose = str.getPose();
 		Point p = pose.getPosition();
-		p.setX(0);
-		p.setY(0);
-		p.setZ(d);
+		p.setX(x);
+		p.setY(y);
+		p.setZ(z);
+		publisher.publish(str);
+//		geometry_msgs.Twist str = publisher.newMessage();
+//		geometry_msgs.Vector3 linear =  str.getLinear();
+//		linear.setX(0);
+//		linear.setY(0);
+//		linear.setZ(d);
+//		geometry_msgs.Vector3 angular =  str.getAngular();
+//		angular.setX(0);
+//		angular.setY(0);
+//		angular.setZ(0);
+//		publisher.publish(str);
+	}
+	
+	private void publishBattery(final Publisher<sensor_msgs.BatteryState> publisher, double z) {
+		sensor_msgs.BatteryState str = publisher.newMessage();
+		str.setPercentage((float) z);
 		publisher.publish(str);
 //		geometry_msgs.Twist str = publisher.newMessage();
 //		geometry_msgs.Vector3 linear =  str.getLinear();

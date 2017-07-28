@@ -11,11 +11,13 @@ public class FeatureTester extends Thread {
 	private String feature;
 	private IDrone drone;
 	private Application app;
+	private long timeout = 0;
 
-	public FeatureTester(String feature, IDrone iDrone, Application app){
+	public FeatureTester(String feature, IDrone iDrone, Application app, long timeout){
 		this.feature = feature;
 		this.drone = iDrone;
 		this.app = app;
+		this.timeout = timeout;
 	}
 
 	@Override
@@ -26,8 +28,8 @@ public class FeatureTester extends Thread {
 		try {
 			clazz = Class.forName("features."+this.getFeature());
 			Constructor<?> constructor = null;
-			constructor = clazz.getConstructor(IDrone.class, Application.class);
-			instance = constructor.newInstance(this.drone, this.app);
+			constructor = clazz.getConstructor(IDrone.class, Application.class, long.class);
+			instance = constructor.newInstance(this.drone, this.app, this.timeout);
 			clazz.getMethod("run").invoke(instance);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException | ClassNotFoundException | NoSuchMethodException | SecurityException e) {

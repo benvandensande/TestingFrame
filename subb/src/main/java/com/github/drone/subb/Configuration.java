@@ -7,6 +7,7 @@ public class Configuration {
 	private Map<String, String> topics;
 	private String simulatorbashpath;
 	private String applicationbashpath;
+	private long timeout = 60;
 	
 	
 	public Map<String, String> getTopics(){
@@ -69,6 +70,14 @@ public class Configuration {
 	
 	public String getSimulatorbashpath() {
 		return simulatorbashpath;
+	}
+	
+	public void setTimeout(long timeout){
+		this.timeout = timeout;
+	}
+	
+	public long getTimeout() {
+		return this.timeout;
 	}
 
 	

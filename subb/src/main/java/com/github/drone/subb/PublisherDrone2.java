@@ -18,7 +18,7 @@ import std_srvs.EmptyResponse;
 /**
  * A simple {@link Publisher} {@link NodeMain}.
  */
-public class PublisherDrone extends AbstractNodeMain {
+public class PublisherDrone2 extends AbstractNodeMain {
 
 	@Override
 	public GraphName getDefaultNodeName() {
@@ -50,9 +50,9 @@ public class PublisherDrone extends AbstractNodeMain {
 							connectedNode.newPublisher("quadrotor/command/pose",  geometry_msgs.PoseStamped._TYPE);
 					int i = 0;
 					while(i<1000){
-						publish(publisher, 2);
+						publish(publisher, 2 , 0, 0);
 						System.out.println("published");
-						publish(publisher, 2);
+						publish(publisher, 2, 0, 0);
 						i += 1;
 					}
 					try {
@@ -61,7 +61,12 @@ public class PublisherDrone extends AbstractNodeMain {
 						e.printStackTrace();
 					}
 					i = 0;
-					publish(publisher, 0.3);
+					publish(publisher, 5,5,5);
+					try {
+						Thread.sleep(7000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 //					while(i<200){
 //						publish(publisher, 0);
 //						//System.out.println("stopped");
@@ -98,7 +103,7 @@ public class PublisherDrone extends AbstractNodeMain {
 						stopClient = connectedNode.newServiceClient("stop", "std_srvs/Empty");
 						std_srvs.EmptyRequest request = stopClient.newMessage();
 						System.out.println(stopClient);
-						while(connectedNode.getCurrentTime().secs < 20){}
+						while(connectedNode.getCurrentTime().secs < 40){}
 						stopClient.call(request, new ServiceResponseListener<std_srvs.EmptyResponse>() {
 							@Override
 							public void onFailure(RemoteException arg0) {
@@ -129,13 +134,13 @@ public class PublisherDrone extends AbstractNodeMain {
 		
 	}
 
-	private void publish(final Publisher<geometry_msgs.PoseStamped> publisher, double d) {
+	private void publish(final Publisher<geometry_msgs.PoseStamped> publisher, double z, double x, double y) {
 		geometry_msgs.PoseStamped str = publisher.newMessage();
 		geometry_msgs.Pose pose = str.getPose();
 		Point p = pose.getPosition();
-		p.setX(0);
-		p.setY(0);
-		p.setZ(d);
+		p.setX(x);
+		p.setY(y);
+		p.setZ(z);
 		publisher.publish(str);
 //		geometry_msgs.Twist str = publisher.newMessage();
 //		geometry_msgs.Vector3 linear =  str.getLinear();
