@@ -13,6 +13,7 @@ Then: Robot state is HOVER
 Test: testCilinder
 Description: "test if the drone stays within a certain circle"
 When: Time is always
-Then: Robot position is meter(0) meter(0) meter(0) within circle with radius meter(2)
+When: Robot position is meter(5) meter(5) meter(5) within circle with radius meter(2)
+Then: Battery level is equal to percent(100)
 
 

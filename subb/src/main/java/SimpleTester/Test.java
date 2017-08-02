@@ -56,8 +56,11 @@ public class Test extends Thread {
 					result = checkThenStatements(result);
 				}else if (this.first == Double.MAX_VALUE){
 					System.out.println("in then always time");
+					result = checkThenStatements(result);
 					while(result && this.app.isRunning() && !checkTimeout()){
-						result = checkThenStatements(result);
+						if(checkStatements(whenStatements)){
+							result = checkThenStatements(result);
+						}
 						try {
 							Test.sleep(25);
 						} catch (InterruptedException e) {
@@ -66,8 +69,11 @@ public class Test extends Thread {
 					}
 				}else if (this.first == Double.MIN_VALUE){
 					System.out.println("in then never time");
+					result = !checkThenStatements(result);
 					while(result && this.app.isRunning() && !checkTimeout()){
-						result = !checkThenStatements(result);
+						if(checkStatements(whenStatements)){
+							result = !checkThenStatements(result);
+						}
 						try {
 							Test.sleep(25);
 						} catch (InterruptedException e) {
