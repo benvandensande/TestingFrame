@@ -1,13 +1,13 @@
 package SimpleTester;
 
 import com.github.drone.subb.Application;
-import com.github.drone.subb.IDrone;
+import com.github.drone.subb.IUAV;
 
 public class RobotDistToObsSentence  extends Sentence {
 
 	private ComparativeSentence sent = null;
 	
-	public RobotDistToObsSentence(ComparativeSentence sent, Application app, IDrone drone) {
+	public RobotDistToObsSentence(ComparativeSentence sent, Application app, IUAV drone) {
 		super(app,drone);
 		this.sent = sent;
 	}
@@ -20,10 +20,6 @@ public class RobotDistToObsSentence  extends Sentence {
 			return false;
 		}
 		return true;
-//		Thread t = new Thread(new ObserverDistanceToObs(getDrone(), getApp(), this.sent));
-//		t.start();
-//		t.join();
-//		return true;
 	}
 
 	@Override
@@ -34,16 +30,11 @@ public class RobotDistToObsSentence  extends Sentence {
 			return false;
 		}
 		return true;
-//		Thread t = new Thread(new ObserverDistanceToObs(getDrone(), getApp(), this.sent));
-//		t.start();
-//		t.join();
-//		return true;
 	}
 
 	@Override
 	public boolean runThen() {
 		double dist = getDrone().getClosestDistanceToObs();
-		System.out.println("Dist: " + dist);
 		boolean bool = this.sent.run(dist);
 		if(!bool ){
 			return false;

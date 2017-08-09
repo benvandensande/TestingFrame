@@ -10,7 +10,7 @@ import java.util.Map;
 import geometry_msgs.Point;
 import geometry_msgs.Vector3;
 
-public class Drone implements IDrone{
+public class UAV implements IUAV{
 	
 	private DroneState state = null;
 	private Point location = null;
@@ -33,7 +33,7 @@ public class Drone implements IDrone{
 	private String name = "";
 	private Mission mission = new Mission();
 	
-	public Drone(String name){
+	public UAV(String name){
 		this.name = name;
 		this.state = DroneState.LANDED;
 		this.trajectory = new ArrayList<Point>();
@@ -255,6 +255,9 @@ public class Drone implements IDrone{
 	}
 
 	public double[] getGPSReading() {
+		System.out.println(this.GPSReading[0]);
+		System.out.println(this.GPSReading[1]);
+		System.out.println(this.GPSReading[2]);
 		return GPSReading;
 	}
 

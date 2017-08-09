@@ -1,33 +1,37 @@
 package com.github.drone.subb;
 
-
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+import org.ros.exception.ServiceException;
 import org.ros.message.MessageListener;
 import org.ros.message.Time;
 import org.ros.namespace.GraphName;
 import org.ros.node.AbstractNodeMain;
 import org.ros.node.ConnectedNode;
-import org.ros.node.topic.Publisher;
 import org.ros.node.topic.Subscriber;
+import org.ros.node.service.*;
 import org.yaml.snakeyaml.Yaml;
 
 import SimpleTester.TesterThread;
 import geometry_msgs.Point;
 import geometry_msgs.Pose;
-import std_msgs.String;
+import rosjava_test_msgs.AddTwoIntsRequest;
+import rosjava_test_msgs.AddTwoIntsResponse;
+import std_srvs.EmptyRequest;
+import std_srvs.EmptyResponse;
 
-public class SubscriberDrone extends AbstractNodeMain {
+public class CoreFrameWork extends AbstractNodeMain {
 
-	private static IDrone drone = new Drone();
+	private static IUAV drone = new UAV("quadrotor");
 	private static Gazebo gazebo = null;
 	private static Application app = null;
 	private Configuration config = null;
-	private boolean alreadyStarted = false;
+	private static ConnectedNode conNode = null;
 
 	@Override
 	public GraphName getDefaultNodeName() {
@@ -43,37 +47,19 @@ public class SubscriberDrone extends AbstractNodeMain {
 		//			e.printStackTrace();
 		//		}
 		drone.setName("quadrotor");
+		conNode = connectedNode;
 		try {
 			setupConfig();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		java.lang.String name = this.config.getApplication();
-		if(name != null){
-			final Publisher<std_msgs.String> applicationPub = 
-					connectedNode.newPublisher(name, std_msgs.String._TYPE);
-			final Subscriber<std_msgs.String> sub = 
-					connectedNode.newSubscriber(name, std_msgs.String._TYPE);
-			sub.addMessageListener(new MessageListener<std_msgs.String>() {
-				@Override
-				public void onNewMessage(std_msgs.String message) {
-					if(message.getData().equals("started") && !alreadyStarted){
-						alreadyStarted = true;
-						System.out.println("message received: " + message.getData());
-						while(gazebo == null || !gazebo.isRunning()){Thread.yield();}
-						startTester();
-						publish(applicationPub, "run");
-						System.out.println("message send: run");
-						app.setRunning(true);
-					}
-					else if(message.getData().equals("stopped")){
-						System.out.println("message received: " + message.getData());
-						app.setRunning(false);
-					}
-				}
-			});
-		}
+			setupApplicationCommunication(connectedNode);
+			setupSubscribers(connectedNode);
+			initialize();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+	}
 
+	private void setupSubscribers(ConnectedNode connectedNode) {
+		java.lang.String name;
 		name = this.config.getLocation();
 		if(name != null){
 			Subscriber<geometry_msgs.PoseStamped> subscriberLocation = connectedNode.newSubscriber(drone.getName()+name, geometry_msgs.PoseStamped._TYPE);
@@ -95,44 +81,41 @@ public class SubscriberDrone extends AbstractNodeMain {
 				@Override
 				public void onNewMessage(gazebo_msgs.ModelStates message) {
 					if(message.getName().contains("quadrotor")){
-						subscriberGazebo.shutdown();
 						List<Pose> poseLst = message.getPose();
-						if(poseLst.size() > 2){
-							List<Pose> newLst = poseLst.subList(2, poseLst.size()-1);
-							for (Pose pose:newLst){
-								System.out.println("object at: " + pose);
-								drone.getEnvironnement().addObjectToEnvironnemnt(new Object(null, pose.getPosition()));
-							}
-						}
+						drone.getEnvironnement().addObjectsToEnvironnemnt(poseLst,message.getName());
 						gazebo.setRunning(true);
 					};
 				}
 			});
 		}
-		Subscriber<sensor_msgs.NavSatFix> subscriberGPS = connectedNode.newSubscriber(drone.getName()+"/fix", sensor_msgs.NavSatFix._TYPE);
-		subscriberGPS.addMessageListener(new MessageListener<sensor_msgs.NavSatFix>() {
-
-			@Override
-			public void onNewMessage(sensor_msgs.NavSatFix message) {
-				double status = message.getAltitude();
-				getDrone().GPSSignal(!Double.isNaN(status));
-			}
-		});
+		name = this.config.getGPS();
+		if(name != null){
+			Subscriber<sensor_msgs.NavSatFix> subscriberGPS = connectedNode.newSubscriber(drone.getName()+name, sensor_msgs.NavSatFix._TYPE);
+			subscriberGPS.addMessageListener(new MessageListener<sensor_msgs.NavSatFix>() {
+				@Override
+				public void onNewMessage(sensor_msgs.NavSatFix message) {
+					double alt = message.getAltitude();
+					double l = message.getLatitude();
+					double lat = message.getLongitude();
+					getDrone().GPSReading(alt, l, lat);
+				}
+			});
+		}
 		Subscriber<rosgraph_msgs.Clock> subscriberTime = connectedNode.newSubscriber("/clock", rosgraph_msgs.Clock._TYPE);
 		subscriberTime.addMessageListener(new MessageListener<rosgraph_msgs.Clock>() {
 
 			@Override
 			public void onNewMessage(rosgraph_msgs.Clock message) {
 				Time time = message.getClock();
-				SubscriberDrone.app.setSimulationTime(time);
+				CoreFrameWork.app.setSimulationTime(time);
 			}
 		});
-		Subscriber< geometry_msgs.Vector3> subscriberWind = connectedNode.newSubscriber("wind", geometry_msgs.Vector3._TYPE);
+		Subscriber< geometry_msgs.Vector3> subscriberWind = connectedNode.newSubscriber("/wind", geometry_msgs.Vector3._TYPE);
 		subscriberWind.addMessageListener(new MessageListener< geometry_msgs.Vector3>() {
 
 			@Override
 			public void onNewMessage( geometry_msgs.Vector3 message) {
-				System.out.println(message.getX());
+				System.out.println("wind: " + message.getX());
 				getDrone().getEnvironnement().setWindSpeed(message);
 			}
 		});
@@ -156,23 +139,61 @@ public class SubscriberDrone extends AbstractNodeMain {
 				}
 			});
 		}
+		name = this.config.getBarometer();
+		if(name != null){
+			Subscriber<geometry_msgs.PointStamped> subscriberBarometer = connectedNode.newSubscriber(drone.getName()+ name, geometry_msgs.PointStamped._TYPE);
+			subscriberBarometer.addMessageListener(new MessageListener<geometry_msgs.PointStamped>() {
+				@Override
+				public void onNewMessage(geometry_msgs.PointStamped message) {
+					//System.out.println(message.getPoint().getZ());
+					getDrone().BaroReading(message.getPoint());
+				}
+			});
+		}
 		//TODO battery message are not comming true
-		Subscriber<sensor_msgs.BatteryState> subscriberBattery = connectedNode.newSubscriber(drone.getName()+"/sonar", sensor_msgs.BatteryState._TYPE);
+		Subscriber<sensor_msgs.BatteryState> subscriberBattery = connectedNode.newSubscriber(drone.getName()+"/battery", sensor_msgs.BatteryState._TYPE);
 		subscriberBattery.addMessageListener(new MessageListener<sensor_msgs.BatteryState>() {
 			@Override
 			public void onNewMessage(sensor_msgs.BatteryState message) {
-				System.out.println(message.getPercentage());
+				System.out.println("******Battery" + message.getPercentage());
+				getDrone().BatteryPerc(message.getPercentage());
 			}
 		});
+	}
 
-		try {
-			initialize();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
+	private void setupApplicationCommunication(ConnectedNode connectedNode) {
+		java.lang.String name = this.config.getApplicationStart();
+		connectedNode.newServiceServer(
+			    name, rosjava_test_msgs.AddTwoInts._TYPE,
+			    new ServiceResponseBuilder<rosjava_test_msgs.AddTwoIntsRequest,rosjava_test_msgs.AddTwoIntsResponse>() {
+
+				@Override
+				public void build(AddTwoIntsRequest arg0, AddTwoIntsResponse arg1) throws ServiceException {
+					app.setRunning(true);
+					while(gazebo == null || !gazebo.isRunning()){Thread.yield();}
+					ConnectedNode con = CoreFrameWork.getConNode();
+					int startTime = con.getCurrentTime().secs + 2;
+					arg1.setSum(startTime);
+					startTester(con, startTime);
+					
+				}
+			    }
+			);
+		name = this.config.getApplicationStop();
+		connectedNode.newServiceServer(
+			    name, "std_srvs/Empty",
+			    new ServiceResponseBuilder<std_srvs.EmptyRequest,std_srvs.EmptyResponse>() {
+
+				@Override
+				public void build(EmptyRequest arg0, EmptyResponse arg1) throws ServiceException {
+					app.setRunning(false);
+				}
+			    }
+			);
 	}
 
 	private void initialize() throws IOException {
+		System.out.println("init");
 		if(app == null){
 			app = new Application();
 			app.setPath(this.config.getApplicationbashpath());
@@ -187,30 +208,32 @@ public class SubscriberDrone extends AbstractNodeMain {
 	}
 
 	private void setupConfig() throws IOException {
-		Yaml yaml = new Yaml();
-		try(InputStream in = Files.newInputStream(Paths.get("/home/ben/rosjava/src/drone/subb/src/main/java/ConfigurationFile.yml"))){
+		File dir = new File(System.getProperty("user.dir"));
+        dir =  dir.getParentFile().getParentFile().getParentFile().getParentFile();
+        Yaml yaml = new Yaml();
+		try(InputStream in = Files.newInputStream(Paths.get(dir+ "/ConfigurationFile.yml"))){
 			this.config = yaml.loadAs( in,  Configuration.class);
 		}
 	}
 
-	private void startTester(){
-		System.out.prinln("gaaaaaaaaaaaaaan");
-		TesterThread test = new TesterThread(SubscriberDrone.getDrone(), app);
+	private void startTester(ConnectedNode con, int startTime){
+		TesterThread test = new TesterThread(CoreFrameWork.getDrone(), app, this, con, startTime,this.config.getTimeout());
 		Thread t = new Thread(test);
 		t.start();
 	}
 
-	public static IDrone getDrone() {
+	public static IUAV getDrone() {
 		return drone;
+	}
+	
+	public static ConnectedNode getConNode() {
+		return conNode;
 	}
 
 	public void shutdown(){
-		gazebo.shutdown();
+		long beginTime = System.currentTimeMillis();
+		while(app.isRunning() && (System.currentTimeMillis() - beginTime) < 5000){Thread.yield();}
+		Runtime.getRuntime().exit(0);
 	}
-
-	private void publish(Publisher<String> applicationPub, java.lang.String string) {
-		std_msgs.String str = applicationPub.newMessage();
-		str.setData(string);
-		applicationPub.publish(str);
-	}
+	
 }

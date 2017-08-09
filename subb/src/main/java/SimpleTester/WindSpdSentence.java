@@ -1,13 +1,13 @@
 package SimpleTester;
 
 import com.github.drone.subb.Application;
-import com.github.drone.subb.IDrone;
+import com.github.drone.subb.IUAV;
 
 public class WindSpdSentence extends Sentence {
 
 	private ComparativeSentence sent = null;
 
-	public WindSpdSentence(ComparativeSentence i, Application app, IDrone drone) {
+	public WindSpdSentence(ComparativeSentence i, Application app, IUAV drone) {
 		super(app,drone);
 		this.sent = i;
 	}

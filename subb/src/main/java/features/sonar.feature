@@ -1,3 +1,3 @@
 Test: test
-When: Robot state is HOVER
-Then: Robot distance to obstacles is greater then meter(1)
+When: UAV state is HOVER
+Then: UAV distance to obstacles is greater than meter(1)

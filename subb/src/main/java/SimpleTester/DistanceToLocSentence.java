@@ -1,7 +1,7 @@
 package SimpleTester;
 
 import com.github.drone.subb.Application;
-import com.github.drone.subb.IDrone;
+import com.github.drone.subb.IUAV;
 
 import Units.Unit;
 import geometry_msgs.Point;
@@ -13,7 +13,7 @@ public class DistanceToLocSentence extends Sentence {
 	private ComparativeSentence sent = null;
 
 	public DistanceToLocSentence(Unit xPos,  Unit yPos, Unit zPos, ComparativeSentence sent, Application app,
-			IDrone drone) {
+			IUAV drone) {
 		super(app,drone);
 		this.x = xPos.getValue();
 		this.y = yPos.getValue();

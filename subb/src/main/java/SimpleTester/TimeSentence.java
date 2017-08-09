@@ -1,7 +1,7 @@
 package SimpleTester;
 
 import com.github.drone.subb.Application;
-import com.github.drone.subb.IDrone;
+import com.github.drone.subb.IUAV;
 
 public class TimeSentence extends Sentence{
 	
@@ -9,7 +9,7 @@ public class TimeSentence extends Sentence{
 	private double value = 0;
 
 	
-	public TimeSentence(double val, Application app, IDrone drone, Test test){
+	public TimeSentence(double val, Application app, IUAV drone, Test test){
 		super(app,drone);
 		this.test = test;
 		this.value = val;

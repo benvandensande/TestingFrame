@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-public interface IDrone {
+public interface IUAV {
 	public double getHeight();
 	public DroneState getState();
 	public void setPosition(Point pos);

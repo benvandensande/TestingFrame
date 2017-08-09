@@ -17,7 +17,6 @@ public class textParser {
 		BufferedReader br = new BufferedReader(new FileReader(dir+ "/prop"));
 		String line;
 		while ((line = br.readLine()) != null) {
-			System.out.println(line.toLowerCase());
 			cum.addFeature(line.toLowerCase());
 		}
 		br.close();

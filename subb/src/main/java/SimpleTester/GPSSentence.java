@@ -2,7 +2,7 @@ package SimpleTester;
 
 import com.github.drone.subb.Application;
 import com.github.drone.subb.ComponentStatus;
-import com.github.drone.subb.IDrone;
+import com.github.drone.subb.IUAV;
 
 import Units.Unit;
 
@@ -13,7 +13,7 @@ public class GPSSentence extends ComponentSentence {
 	private double zPos = 0;
 	private PositionSent sent = null;
 
-	public GPSSentence(Unit i, Unit j, Unit d, PositionSent t, Application app, IDrone drone) {
+	public GPSSentence(Unit i, Unit j, Unit d, PositionSent t, Application app, IUAV drone) {
 		super(app,drone);
 		this.xPos = i.getValue();
 		this.yPos = j.getValue();
@@ -21,7 +21,7 @@ public class GPSSentence extends ComponentSentence {
 		this.sent = t;
 	}
 
-	public GPSSentence(Application app, IDrone drone) {
+	public GPSSentence(Application app, IUAV drone) {
 		super(app,drone);
 	}
 

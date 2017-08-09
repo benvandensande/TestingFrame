@@ -1,7 +1,7 @@
 package SimpleTester;
 
 import com.github.drone.subb.Application;
-import com.github.drone.subb.IDrone;
+import com.github.drone.subb.IUAV;
 
 import Units.Unit;
 
@@ -11,7 +11,7 @@ public class MissionGoalSentence extends Sentence{
 	private double y = 0;
 	private double z = 0;
 	
-	public MissionGoalSentence(Unit x, Unit y, Unit z, Application app, IDrone drone){
+	public MissionGoalSentence(Unit x, Unit y, Unit z, Application app, IUAV drone){
 		super(app,drone);
 		this.x = x.getValue();
 		this.y = y.getValue();

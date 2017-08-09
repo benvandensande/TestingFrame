@@ -6,21 +6,21 @@ import java.util.ArrayList;
 import org.ros.node.ConnectedNode;
 
 import com.github.drone.subb.Application;
-import com.github.drone.subb.IDrone;
-import com.github.drone.subb.SubscriberDrone;
+import com.github.drone.subb.IUAV;
+import com.github.drone.subb.CoreFrameWork;
 import com.github.drone.subb.textParser;
 
 public class TesterThread extends Thread{
 	
-	private IDrone drone;
+	private IUAV drone;
 	private ArrayList<String> features;
 	private Application app;
-	private SubscriberDrone sub;
+	private CoreFrameWork sub;
 	private ConnectedNode con;
 	private int startTime = 0;
 	private long timeout = 0;
 
-	public TesterThread (IDrone drone, Application app, SubscriberDrone subb, ConnectedNode con, int startTime, long timeout){
+	public TesterThread (IUAV drone, Application app, CoreFrameWork subb, ConnectedNode con, int startTime, long timeout){
 		this.drone = drone;
 		this.app = app;
 		this.sub = subb;

@@ -2,18 +2,18 @@ package SimpleTester;
 
 import com.github.drone.subb.Application;
 import com.github.drone.subb.ComponentStatus;
-import com.github.drone.subb.IDrone;
+import com.github.drone.subb.IUAV;
 
 public class SonarSentence extends ComponentSentence {
 	
 	private ComparativeSentence sent = null;
 
-	public SonarSentence(ComparativeSentence sent, Application app, IDrone drone) {
+	public SonarSentence(ComparativeSentence sent, Application app, IUAV drone) {
 		super(app,drone);
 		this.sent = sent;
 	}
 	
-	public SonarSentence(Application app, IDrone drone) {
+	public SonarSentence(Application app, IUAV drone) {
 		super(app,drone);
 	}
 

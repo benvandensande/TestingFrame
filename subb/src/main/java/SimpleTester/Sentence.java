@@ -1,17 +1,17 @@
 package SimpleTester;
 
 import com.github.drone.subb.Application;
-import com.github.drone.subb.IDrone;
+import com.github.drone.subb.IUAV;
 
 public abstract class Sentence {
 	
 	private Application app = null;
-	private IDrone drone = null;
+	private IUAV drone = null;
 	
 	public Sentence(){
 	}
 	
-	public Sentence(Application app, IDrone drone){
+	public Sentence(Application app, IUAV drone){
 		this.setApp(app);
 		this.setDrone(drone);
 	}
@@ -20,11 +20,11 @@ public abstract class Sentence {
 		return app;
 	}
 
-	public IDrone getDrone() {
+	public IUAV getDrone() {
 		return drone;
 	}
 
-	public void setDrone(IDrone drone) {
+	public void setDrone(IUAV drone) {
 		this.drone = drone;
 	}
 

@@ -2,13 +2,13 @@ package SimpleTester;
 
 import com.github.drone.subb.Application;
 import com.github.drone.subb.DroneState;
-import com.github.drone.subb.IDrone;
+import com.github.drone.subb.IUAV;
 
 public class RobotStSentence extends Sentence {
 
 	private String state = "";
 
-	public RobotStSentence(String state, Application app, IDrone drone) {
+	public RobotStSentence(String state, Application app, IUAV drone) {
 		super(app,drone);
 		this.state = state;
 	}

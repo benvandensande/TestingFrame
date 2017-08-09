@@ -1,5 +1,6 @@
-Test: testTakeOffBeforeFlight
-Description: "let the drone take off before flight"
-When: Battery level is lower then percent(50)
-Then: Robot state is LANDING
+Test: testLandingBattery
+Description: "Check if the UAV is landing if the battery is lower then 50 percent"
+Given: Battery status is ACTIVE
+When: Battery level is lower than percent(50)
+Then: UAV state is LANDING
 

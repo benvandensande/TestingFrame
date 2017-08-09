@@ -2,18 +2,18 @@ package SimpleTester;
 
 import com.github.drone.subb.Application;
 import com.github.drone.subb.ComponentStatus;
-import com.github.drone.subb.IDrone;
+import com.github.drone.subb.IUAV;
 
 public class BatterySentence extends ComponentSentence {
 
 	private ComparativeSentence sent = null;
 
-	public BatterySentence(ComparativeSentence sent, Application app, IDrone drone) {
+	public BatterySentence(ComparativeSentence sent, Application app, IUAV drone) {
 		super(app,drone);
 		this.sent = sent;
 	}
 	
-	public BatterySentence(Application app, IDrone drone) {
+	public BatterySentence(Application app, IUAV drone) {
 		super(app,drone);
 	}
 

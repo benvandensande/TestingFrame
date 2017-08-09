@@ -43,12 +43,11 @@ public class Test extends Thread {
 	}
 
 	public void run() {
+		System.out.println("Running test: " + this.name + ", timeout: " + this.timeOut);
 		this.beginTime = System.currentTimeMillis();
 		boolean result = checkStatements(this.givenStatements);
-		System.out.println(result);
 		if(result) {
 			System.out.println("in when");
-			System.out.println(this.timeOut);
 			result = checkStatements(this.whenStatements);
 			if(result) {
 				if(Double.isNaN(this.first)){

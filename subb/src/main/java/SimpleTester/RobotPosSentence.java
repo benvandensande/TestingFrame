@@ -2,7 +2,7 @@ package SimpleTester;
 
 
 import com.github.drone.subb.Application;
-import com.github.drone.subb.IDrone;
+import com.github.drone.subb.IUAV;
 
 import Units.Unit;
 import geometry_msgs.Point;
@@ -14,7 +14,7 @@ public class RobotPosSentence extends Sentence {
 	private double zPos = 0;
 	private PositionSent sent = null;
 
-	public RobotPosSentence(Unit i, Unit j, Unit d, PositionSent t, Application app, IDrone drone) {
+	public RobotPosSentence(Unit i, Unit j, Unit d, PositionSent t, Application app, IUAV drone) {
 		super(app,drone);
 		this.xPos = i.getValue();
 		this.yPos = j.getValue();

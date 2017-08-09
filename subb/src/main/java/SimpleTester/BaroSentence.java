@@ -2,18 +2,18 @@ package SimpleTester;
 
 import com.github.drone.subb.Application;
 import com.github.drone.subb.ComponentStatus;
-import com.github.drone.subb.IDrone;
+import com.github.drone.subb.IUAV;
 
 public class BaroSentence extends ComponentSentence {
 	
 	private ComparativeSentence sent = null;
 
-	public BaroSentence(ComparativeSentence sent, Application app, IDrone drone) {
+	public BaroSentence(ComparativeSentence sent, Application app, IUAV drone) {
 		super(app,drone);
 		this.sent = sent;
 	}
 
-	public BaroSentence(Application app, IDrone drone) {
+	public BaroSentence(Application app, IUAV drone) {
 		super(app,drone);
 	}
 

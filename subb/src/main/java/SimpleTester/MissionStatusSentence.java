@@ -1,14 +1,14 @@
 package SimpleTester;
 
 import com.github.drone.subb.Application;
-import com.github.drone.subb.IDrone;
+import com.github.drone.subb.IUAV;
 import com.github.drone.subb.MissionStatus;
 
 public class MissionStatusSentence extends Sentence {
 	
 	private MissionStatus status;
 	
-	public MissionStatusSentence(String st, Application app, IDrone drone){
+	public MissionStatusSentence(String st, Application app, IUAV drone){
 		super(app,drone);
 		this.status = MissionStatus.valueOf(st);
 	}

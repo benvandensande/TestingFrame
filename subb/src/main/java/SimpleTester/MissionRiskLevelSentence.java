@@ -1,14 +1,14 @@
 package SimpleTester;
 
 import com.github.drone.subb.Application;
-import com.github.drone.subb.IDrone;
+import com.github.drone.subb.IUAV;
 import com.github.drone.subb.MissionRiskLevel;
 
 public class MissionRiskLevelSentence extends Sentence {
 	
 	private MissionRiskLevel riskLevel;
 	
-	public MissionRiskLevelSentence(String risklvl, Application app, IDrone drone){
+	public MissionRiskLevelSentence(String risklvl, Application app, IUAV drone){
 		super(app,drone);
 		this.riskLevel = MissionRiskLevel.valueOf(risklvl);
 	}

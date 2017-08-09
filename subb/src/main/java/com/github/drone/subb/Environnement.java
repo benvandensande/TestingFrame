@@ -12,12 +12,12 @@ public class Environnement {
 	private Vector3 windSpeed = null;
 	private List<String> objectNames = null;
 	private List<Object> objectsInEnvironnemnt = null;
-	private List<IDrone> drones = null;
+	private List<IUAV> drones = null;
 	
 	public Environnement(){
 		this.objectsInEnvironnemnt = new ArrayList<Object>();
 		this.objectNames = new ArrayList<String>();
-		this.drones = new ArrayList<IDrone>();
+		this.drones = new ArrayList<IUAV>();
 	}
 
 	public double getAbsoluteWindVelocity() {
@@ -47,7 +47,7 @@ public class Environnement {
 				if(name.contains("quadrotor")){
 					System.out.println("drone added");
 					this.objectNames.add(name);
-					this.addDrone(new Drone(name));
+					this.addDrone(new UAV(name));
 				}else{
 					// TODO add size of objects
 					int index = nameLst.indexOf(name);
@@ -77,15 +77,15 @@ public class Environnement {
 		return dist;
 	}
 
-	public List<IDrone> getDrones() {
+	public List<IUAV> getDrones() {
 		return drones;
 	}
 
-	public void addDrone(IDrone drone) {
+	public void addDrone(IUAV drone) {
 		this.drones.add(drone);
 	}
 	
-	public void removeDrone(IDrone drone){
+	public void removeDrone(IUAV drone){
 		this.drones.remove(drone);
 	}
 }

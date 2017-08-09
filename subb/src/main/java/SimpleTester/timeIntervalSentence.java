@@ -1,7 +1,7 @@
 package SimpleTester;
 
 import com.github.drone.subb.Application;
-import com.github.drone.subb.IDrone;
+import com.github.drone.subb.IUAV;
 
 import Units.Unit;
 
@@ -11,7 +11,7 @@ public class timeIntervalSentence extends Sentence {
 	private double second;
 	private Test test;
 
-	public timeIntervalSentence(Unit fst, Unit scnd, Application app, IDrone drone, Test test){
+	public timeIntervalSentence(Unit fst, Unit scnd, Application app, IUAV drone, Test test){
 		super(app,drone);
 		this.first = fst.getValue();
 		this.second = scnd.getValue();
@@ -25,10 +25,6 @@ public class timeIntervalSentence extends Sentence {
 			return true;
 		}
 		return false;
-//		Thread t = new Thread(new ObserverTime(getDrone(), getApp(), this.first, this.second));
-//		t.start();
-//		t.join();
-//		return true;
 	}
 
 	@Override
@@ -36,14 +32,9 @@ public class timeIntervalSentence extends Sentence {
 		if(this.getApp().getSimulationTime() >= this.first && this.getApp().getSimulationTime() <= this.second){
 			this.test.setFirst(this.first);
 			this.test.setSecond(this.second);
-			System.out.println("true");
 			return true;
 		}
 		return false;
-//		Thread t = new Thread(new ObserverTime(getDrone(), getApp(), this.first, this.second));
-//		t.start();
-//		t.join();
-//		return true;
 	}
 
 	@Override
