@@ -47,14 +47,14 @@ public class Test extends Thread {
 		this.beginTime = System.currentTimeMillis();
 		boolean result = checkStatements(this.givenStatements);
 		if(result) {
-			System.out.println("in when");
+			//System.out.println("in when");
 			result = checkStatements(this.whenStatements);
 			if(result) {
 				if(Double.isNaN(this.first)){
-					System.out.println("in then");
+					//System.out.println("in then");
 					result = checkThenStatements(result);
 				}else if (this.first == Double.MAX_VALUE){
-					System.out.println("in then always time");
+					//System.out.println("in then always time");
 					result = checkThenStatements(result);
 					while(result && this.app.isRunning() && !checkTimeout()){
 						if(checkStatements(whenStatements)){
@@ -67,7 +67,7 @@ public class Test extends Thread {
 						}
 					}
 				}else if (this.first == Double.MIN_VALUE){
-					System.out.println("in then never time");
+					//System.out.println("in then never time");
 					result = !checkThenStatements(result);
 					while(result && this.app.isRunning() && !checkTimeout()){
 						if(checkStatements(whenStatements)){
@@ -80,7 +80,7 @@ public class Test extends Thread {
 						}
 					}
 				}else{
-					System.out.println("in then long");
+					//System.out.println("in then long");
 					while(result && checkBoundaries() && this.app.isRunning() && !checkTimeout()){
 						result = checkThenStatements(result);
 						try {

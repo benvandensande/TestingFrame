@@ -5,6 +5,9 @@ public class WhenStatement extends Statement {
 	public WhenStatement(Sentence Body) {
 		super(Body);
 	}
+	
+	public WhenStatement() {
+	}
 
 	@Override
 	public boolean run() {

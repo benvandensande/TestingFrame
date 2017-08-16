@@ -255,9 +255,6 @@ public class UAV implements IUAV{
 	}
 
 	public double[] getGPSReading() {
-		System.out.println(this.GPSReading[0]);
-		System.out.println(this.GPSReading[1]);
-		System.out.println(this.GPSReading[2]);
 		return GPSReading;
 	}
 

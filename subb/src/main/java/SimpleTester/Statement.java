@@ -8,6 +8,9 @@ public abstract class Statement {
 		this.data = Body;
 	}
 
+	public Statement() {
+	}
+
 	abstract boolean run();
 
 	abstract void addToCategory(Test test);

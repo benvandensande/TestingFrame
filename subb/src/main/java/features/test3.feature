@@ -13,7 +13,7 @@ Then: UAV state is HOVER
 Test: testCilinder
 Description: "test if the drone stays within a certain circle"
 When: Time is always
-Then: UAV position is meter(1) meter(1) meter(1) within circle with radius meter(4)
+Then: UAV position is meter(1) meter(1) meter(1) within circle with radius meter(3)
 
 Test: testObstacles
 Description: "test if the drone stays within a certain circle"

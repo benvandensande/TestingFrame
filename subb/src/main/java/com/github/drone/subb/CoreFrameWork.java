@@ -75,7 +75,6 @@ public class CoreFrameWork extends AbstractNodeMain {
 
 		name = this.config.getSimulator();
 		if(name != null){
-			//TODO add objects from environnement
 			final Subscriber<gazebo_msgs.ModelStates> subscriberGazebo = connectedNode.newSubscriber(name, gazebo_msgs.ModelStates._TYPE);
 			subscriberGazebo.addMessageListener(new MessageListener<gazebo_msgs.ModelStates>() {
 				@Override
@@ -150,12 +149,10 @@ public class CoreFrameWork extends AbstractNodeMain {
 				}
 			});
 		}
-		//TODO battery message are not comming true
 		Subscriber<sensor_msgs.BatteryState> subscriberBattery = connectedNode.newSubscriber(drone.getName()+"/battery", sensor_msgs.BatteryState._TYPE);
 		subscriberBattery.addMessageListener(new MessageListener<sensor_msgs.BatteryState>() {
 			@Override
 			public void onNewMessage(sensor_msgs.BatteryState message) {
-				System.out.println("******Battery" + message.getPercentage());
 				getDrone().BatteryPerc(message.getPercentage());
 			}
 		});

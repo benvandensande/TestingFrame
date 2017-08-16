@@ -6,6 +6,9 @@ public class ThenStatement extends Statement {
 		super(Body);
 	}
 
+	public ThenStatement() {
+	}
+
 	@Override
 	public boolean run() {
 		return this.data.runThen();
