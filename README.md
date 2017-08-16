@@ -43,6 +43,7 @@ topics:
 
 applicationbashpath: /home/User/Documents/application.sh
 simulatorbashpath: /home/User/Documents/simulator.sh
+timeout: 50000
 ```
 
 
@@ -57,6 +58,7 @@ In 'simulator: /gazebo_modelstates' simulator is the keyword to define that on t
 between the simulator of the drone and the testing framework.
 The line 'applicationbashpath: /home/User/Documents/application.sh' is used to define the path to the file that is used to run the application.
 The line 'simulatorbashpath: /home/User/Documents/simulator.sh' is used to define the path to the file that is used to run the simulator.
+The line 'timeout: 50000' is used to define the timeout used by the framework.
 The whiteline between simulator and applicationbashpath is necessary as is the indenting of the two topics since the file is written in Yaml.
 Yaml knows that the map is finished by the whiteline.
 All the things defined and explained above are all necessary and can not be left out of any configuration file.
@@ -67,6 +69,8 @@ Besides the application and simulator topic defined above you can add topics for
 - position
 - velocity
 - sonar
+- barometer
+- gps
 
 The same format is used to define them. Add the additional topics after the application and simulator topic in the format '[name]: NameOfTheTopic',
 where name is one of the name in the list above and NameOfTheTopic is the actual name of the topic. Make sure the name: and NameOfTheTopic are seperated by a whitespace.
@@ -221,5 +225,5 @@ $ roscore
 then open a new terminal and go to the folder PathToYourProject/subb/build/install/subb/bin and run
 
 ```
-$ ./subb com.github.drone.subb.SubscriberDrone
+$ ./subb com.github.drone.subb.CoreFrameWork
 ```
